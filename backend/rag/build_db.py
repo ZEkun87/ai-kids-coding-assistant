@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# 通义千问 RAG 知识库构建脚本，通过ChatGPT优化的代码
-
 import os
 import shutil
 import logging
