@@ -1,8 +1,5 @@
 # ai-kids-coding-assistant
 AI 少儿编程助手项目
-好的，我帮你写一个完整的 **README 模板**，适合上传到 GitHub，并且清楚展示你的 AI 少儿编程助手项目。你只需要在项目根目录新建 `README.md` 文件，然后粘贴下面内容即可：
-
----
 
 # AI 少儿编程助手
 
