@@ -1,0 +1,20 @@
+# .gitignore 内容
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+
+# Virtualenv
+venv/
+env/
+.venv/
+
+# Chroma / DB
+vector_db/
+chat_history.db
+
+# macOS
+.DS_Store

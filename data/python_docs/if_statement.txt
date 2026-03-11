@@ -1,0 +1,10 @@
+Python If Statement
+
+The if statement is used for conditional execution.
+
+Example:
+
+age = 18
+
+if age >= 18:
+    print("Adult")

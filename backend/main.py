@@ -1,0 +1,261 @@
+# backend/main.py
+import hashlib
+from fastapi import FastAPI, UploadFile, File, Query, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from dotenv import load_dotenv
+import os, io, logging, uuid, time, shutil
+from datetime import datetime
+from sqlalchemy import create_engine, Column, String, DateTime, Integer
+from sqlalchemy.orm import sessionmaker, declarative_base
+import dashscope
+from dashscope import Generation, TextEmbedding
+from PyPDF2 import PdfReader
+from docx import Document
+import chromadb
+from chromadb.config import Settings
+
+# ---------------- 初始化 ----------------
+load_dotenv()
+dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="AI 少儿编程助手")
+
+# CORS 支持前端访问
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ---------------- 数据库 / 聊天记录 ----------------
+engine = create_engine("sqlite:///chat_history.db")
+Session = sessionmaker(bind=engine)
+Base = declarative_base()
+
+class ChatRecord(Base):
+    __tablename__ = "chat_records"
+    id = Column(Integer, primary_key=True)
+    question = Column(String)
+    answer = Column(String)
+    category = Column(String, default="default")
+    date = Column(DateTime, default=datetime.utcnow)
+
+Base.metadata.create_all(engine)
+
+def save_chat(question, answer, category="default"):
+    session = Session()
+    session.add(ChatRecord(question=question, answer=answer, category=category))
+    session.commit()
+    session.close()
+
+# ---------------- 数据模型 ----------------
+class QuestionRequest(BaseModel):
+    question: str
+    category: str = "default"
+
+class CodeRequest(BaseModel):
+    code: str
+
+class TopicRequest(BaseModel):
+    topic: str
+
+# ---------------- DashScope 调用 ----------------
+def call_dashscope(prompt: str, temperature=0.7, max_tokens=1000) -> str:
+    try:
+        response = Generation.call(
+            model='qwen-turbo',
+            messages=[{'role': 'user', 'content': prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens,
+            result_format='text'
+        )
+        text = getattr(response.output, 'text', None)
+        if text is None and hasattr(response.output, '__iter__'):
+            text = ' '.join([getattr(o, 'text', '') for o in response.output])
+        if text is None:
+            text = str(response.output)
+        return text.strip()
+    except Exception as e:
+        logger.error(f"DashScope API error: {e}")
+        raise HTTPException(status_code=500, detail=f"通义千问调用失败：{str(e)}")
+
+# ---------------- DashScope 嵌入函数 ----------------
+def dashscope_embedding(texts: list[str]) -> list[list[float]]:
+    """生成向量，若失败则用 MD5 降级"""
+    if not texts:
+        return []
+    try:
+        response = TextEmbedding.call(
+            model="text-embedding-v1",
+            input=texts
+        )
+        vectors = [item['embedding'] for item in response.output['embeddings']]
+        return vectors
+    except Exception as e:
+        logger.error(f"Embedding 生成失败：{e}")
+        vectors = []
+        for t in texts:
+            h = int(hashlib.md5(t.encode()).hexdigest(), 16)
+            v = [(h >> (i*8)) % 256 / 255.0 for i in range(32)]
+            vectors.append(v)
+        return vectors
+
+# ---------------- ChromaDB 初始化 ----------------
+VECTOR_DB_PATH = "./vector_db"
+
+# 自动删除旧数据库，避免 schema 不兼容
+if os.path.exists(VECTOR_DB_PATH):
+    shutil.rmtree(VECTOR_DB_PATH)
+os.makedirs(VECTOR_DB_PATH)
+
+client = chromadb.PersistentClient(
+    path=VECTOR_DB_PATH,
+    settings=Settings(allow_reset=True)
+)
+collection = client.get_or_create_collection("documents")
+
+def save_documents_to_vector_db(texts, category="default"):
+    if not texts:
+        return
+    texts = [t.strip() for t in texts if t.strip()]
+    if not texts:
+        return
+    vectors = dashscope_embedding(texts)
+    ids = [f"doc_{uuid.uuid4()}" for _ in texts]
+    metadatas = [{"category": category} for _ in texts]
+    collection.add(
+        documents=texts,
+        embeddings=vectors,
+        metadatas=metadatas,
+        ids=ids
+    )
+
+def query_vector_db(query_text, top_k=3):
+    if not query_text.strip():
+        return []
+    query_vector = dashscope_embedding([query_text])[0]
+    results = collection.query(
+        query_embeddings=[query_vector],
+        n_results=top_k,
+    )
+    return [d for d in results['documents'][0]] if results['documents'] else []
+
+# ---------------- 核心接口 ----------------
+@app.get("/")
+def read_root():
+    return {"message": "AI 少儿编程助手运行中"}
+
+@app.post("/ask")
+def ask_question(request: QuestionRequest):
+    request_id = str(uuid.uuid4())
+    logger.info(f"[{request_id}] Ask question: {request.question}, category: {request.category}")
+    docs = query_vector_db(request.question, top_k=3)
+    context = "\n".join(docs) if docs else "无参考文档"
+    prompt = f"""
+你是少儿编程辅导老师，用简单语言回答以下问题：{request.question}
+参考文档：
+{context}
+
+要求：1. 适合小学生/初中生理解；2. 语气友好；3. 引导思考而非直接给答案。
+"""
+    answer = call_dashscope(prompt, temperature=0.7)
+    save_chat(request.question, answer, request.category)
+    return {"answer": answer, "request_id": request_id, "sources": docs}
+
+@app.post("/analyze")
+def analyze_code_endpoint(request: CodeRequest):
+    prompt = f"""
+分析以下少儿Python代码：{request.code}
+要求：1. 指出语法错误/逻辑问题；2. 给出简单修改建议；3. 用少儿能懂的语言解释。
+"""
+    result = call_dashscope(prompt, temperature=0.5)
+    return {"analysis": result}
+
+@app.post("/exercise")
+def generate_exercise_endpoint(request: TopicRequest):
+    prompt = f"""
+为少儿编程初学者生成关于「{request.topic}」的练习题：
+要求：1. 难度适合小学生；2. 包含题目描述+简单提示；3. 不要给出答案。
+"""
+    result = call_dashscope(prompt, temperature=0.8)
+    return {"exercise": result}
+
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...), category: str = Query("default")):
+    try:
+        content = await file.read()
+        filename = file.filename.lower()
+        texts = []
+        if filename.endswith(".pdf"):
+            reader = PdfReader(io.BytesIO(content))
+            texts = [p.extract_text() for p in reader.pages if p.extract_text()]
+        elif filename.endswith(".docx"):
+            doc = Document(io.BytesIO(content))
+            texts = [p.text for p in doc.paragraphs if p.text.strip()]
+        else:
+            texts = content.decode(errors="ignore").split("\n")
+        texts = [t.strip() for t in texts if t.strip()]
+        save_documents_to_vector_db(texts, category)
+        logger.info(f"Uploaded {len(texts)} docs to category: {category}")
+        return {
+            "status": "success", 
+            "count": len(texts), 
+            "category": category,
+            "msg": "文档已成功入库 RAG 知识库"
+        }
+    except Exception as e:
+        logger.error(f"File upload error: {e}")
+        raise HTTPException(status_code=500, detail=f"文件处理失败：{str(e)}")
+
+@app.get("/history")
+def get_history(category: str = None, limit: int = 20):
+    session = Session()
+    query = session.query(ChatRecord)
+    if category:
+        query = query.filter(ChatRecord.category == category)
+    records = query.order_by(ChatRecord.date.desc()).limit(limit).all()
+    session.close()
+    return [
+        {"question": r.question, "answer": r.answer, "category": r.category, "date": r.date.isoformat()}
+        for r in records
+    ]
+
+@app.post("/ask-stream")
+def ask_stream(request: QuestionRequest):
+    request_id = str(uuid.uuid4())
+    logger.info(f"[{request_id}] Stream question: {request.question}, category: {request.category}")
+
+    def generator():
+        try:
+            docs = query_vector_db(request.question, top_k=3)
+            context = "\n".join(docs) if docs else "无参考文档"
+            prompt = f"""
+你是少儿编程辅导老师，用简单语言回答以下问题：{request.question}
+参考文档：
+{context}
+
+要求：1. 适合小学生/初中生理解；2. 语气友好；3. 引导思考而非直接给答案。
+"""
+            answer = call_dashscope(prompt)
+            for line in answer.split("\n"):
+                if line.strip():
+                    yield line + "\n"
+                    time.sleep(0.05)
+        except Exception as e:
+            logger.error(f"流式回答失败：{e}")
+            yield "抱歉，回答生成失败，请稍后再试～\n"
+
+    return StreamingResponse(generator(), media_type="text/event-stream")
+
+
+# ---------------- 启动 ----------------
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

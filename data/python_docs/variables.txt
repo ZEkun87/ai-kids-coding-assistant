@@ -1,0 +1,17 @@
+Python Variables
+
+Variables are used to store data values.
+
+Example:
+
+name = "Alice"
+age = 10
+
+Python does not require declaring the variable type.
+
+You can reassign variables at any time.
+
+Example:
+
+x = 5
+x = "hello"

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.11",
+    "react-markdown": "^10.1.0"
+  }
+}

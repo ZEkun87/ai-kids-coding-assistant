@@ -1,0 +1,17 @@
+Python Functions
+
+A function is a reusable block of code that performs a specific task.
+
+Functions are defined using the def keyword.
+
+Example:
+
+def greet(name):
+    print("Hello", name)
+
+greet("Alice")
+
+Output:
+Hello Alice
+
+Functions help make code more modular and reusable.

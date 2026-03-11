@@ -1,0 +1,17 @@
+Python For Loop
+
+The for loop in Python is used to iterate over a sequence such as a list, tuple, or string.
+
+Example:
+
+for i in range(5):
+    print(i)
+
+Output:
+0
+1
+2
+3
+4
+
+The loop runs once for each element in the sequence.

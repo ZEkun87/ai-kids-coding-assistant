@@ -1,0 +1,11 @@
+Python While Loop
+
+The while loop runs as long as the condition is True.
+
+Example:
+
+i = 0
+
+while i < 5:
+    print(i)
+    i += 1

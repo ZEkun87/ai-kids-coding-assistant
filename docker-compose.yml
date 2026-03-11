@@ -1,0 +1,39 @@
+# 注意：删除了顶部的 version: '3.8' 字段
+services:
+  # 后端服务（核心）
+  backend:
+    build: ./backend
+    container_name: coding-tutor-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      - PYTHONUNBUFFERED=1
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    volumes:
+      - ./backend/vector_db:/app/vector_db
+      - ./backend/chroma_db:/app/chroma_db
+      - ./backend/chat_history.db:/app/chat_history.db
+      - ./data:/app/data
+    networks:
+      - coding-tutor-network
+
+  # 先注释前端（优先保证后端启动）
+  # frontend:
+  #   build:
+  #     context: ./frontend/vite-project
+  #     dockerfile: Dockerfile
+  #   container_name: coding-tutor-frontend
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - coding-tutor-network
+
+networks:
+  coding-tutor-network:
+    driver: bridge

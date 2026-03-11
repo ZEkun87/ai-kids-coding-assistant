@@ -1,0 +1,11 @@
+Python String
+
+Strings are sequences of characters.
+
+Example:
+
+text = "Hello World"
+
+You can access characters using indexing.
+
+print(text[0])

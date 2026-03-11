@@ -1,0 +1,16 @@
+Python Lists
+
+A list is a collection of items that are ordered and changeable.
+
+Example:
+
+numbers = [1,2,3,4]
+
+You can access items using indexes.
+
+Example:
+
+print(numbers[0])
+
+Output:
+1

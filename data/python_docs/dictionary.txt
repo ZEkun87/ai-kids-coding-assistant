@@ -1,0 +1,19 @@
+Python Dictionary
+
+A dictionary stores data in key-value pairs.
+
+Example:
+
+student = {
+"name": "Alice",
+"age": 10
+}
+
+Access values using keys.
+
+Example:
+
+print(student["name"])
+
+Output:
+Alice
