@@ -15,6 +15,7 @@ from PyPDF2 import PdfReader
 from docx import Document
 import chromadb
 from chromadb.config import Settings
+import threading
 
 # ---------------- 初始化 ----------------
 load_dotenv()
@@ -110,16 +111,84 @@ def dashscope_embedding(texts: list[str]) -> list[list[float]]:
 # ---------------- ChromaDB 初始化 ----------------
 VECTOR_DB_PATH = "./vector_db"
 
-# 自动删除旧数据库，避免 schema 不兼容
-if os.path.exists(VECTOR_DB_PATH):
-    shutil.rmtree(VECTOR_DB_PATH)
-os.makedirs(VECTOR_DB_PATH)
+VECTOR_DB_PATH = "/app/vector_db"  # Docker 中使用绝对路径
+COLLECTION_NAME = "documents"
 
-client = chromadb.PersistentClient(
-    path=VECTOR_DB_PATH,
-    settings=Settings(allow_reset=True)
-)
-collection = client.get_or_create_collection("documents")
+_vector_db_client = None
+_lock = threading.Lock()
+
+def get_vector_db_client():
+    """初始化并返回 Chroma PersistentClient（单例，线程安全）"""
+    global _vector_db_client
+    if _vector_db_client is not None:
+        return _vector_db_client
+
+    with _lock:
+        if _vector_db_client is not None:
+            return _vector_db_client
+
+        try:
+            # 确保路径存在
+            os.makedirs(VECTOR_DB_PATH, exist_ok=True)
+
+            client = chromadb.PersistentClient(
+                path=VECTOR_DB_PATH,
+                settings=Settings(
+                    allow_reset=False,  # 不清空已有数据
+                    anonymized_telemetry=False
+                )
+            )
+
+            # 创建或获取 collection
+            if COLLECTION_NAME not in [c.name for c in client.list_collections()]:
+                client.create_collection(COLLECTION_NAME)
+                logger.info(f"Created collection: {COLLECTION_NAME}")
+            else:
+                logger.info(f"Collection exists: {COLLECTION_NAME}")
+
+            _vector_db_client = client
+            return client
+
+        except Exception as e:
+            logger.error(f"Chroma DB init failed: {e}")
+            raise
+
+def get_collection():
+    client = get_vector_db_client()
+    return client.get_collection(COLLECTION_NAME)
+
+
+# ---------------- Vector DB 操作 ----------------
+def save_documents_to_vector_db(texts, category="default"):
+    """将文本存入 Chroma 向量数据库"""
+    if not texts:
+        return
+    texts = [t.strip() for t in texts if t.strip()]
+    if not texts:
+        return
+    vectors = dashscope_embedding(texts)
+    ids = [f"doc_{uuid.uuid4()}" for _ in texts]
+    metadatas = [{"category": category} for _ in texts]
+    collection = get_collection()
+    collection.add(
+        documents=texts,
+        embeddings=vectors,
+        metadatas=metadatas,
+        ids=ids
+    )
+
+def query_vector_db(query_text, top_k=3):
+    """查询 Chroma 向量数据库"""
+    if not query_text.strip():
+        return []
+    query_vector = dashscope_embedding([query_text])[0]
+    collection = get_collection()
+    results = collection.query(
+        query_embeddings=[query_vector],
+        n_results=top_k,
+    )
+    return [d for d in results['documents'][0]] if results['documents'] else []
+
 
 def save_documents_to_vector_db(texts, category="default"):
     if not texts:
