@@ -1,7 +1,6 @@
 # ai-kids-coding-assistant
 AI 少儿编程助手项目
 
-# AI 少儿编程助手
 
 > 一个基于 FastAPI + DashScope + ChromaDB 的 AI 少儿编程辅导助手
 > 适合小学生和初中生的 Python 编程学习与练习辅助工具。
