@@ -1,6 +1,5 @@
 # ai-kids-coding-assistant
 AI 少儿编程助手项目
-
 > 一个基于 FastAPI + DashScope + ChromaDB 的 AI 少儿编程辅导助手
 > 适合小学生和初中生的 Python 编程学习与练习辅助工具。
 
@@ -209,6 +208,7 @@ GET /history?category=python&limit=10
 ## 项目结构示例
 
 ```
+<<<<<<< HEAD
 ai-coding-tutor
 │
 ├├── backend
@@ -238,6 +238,16 @@ ai-coding-tutor
 ├── README.md
 ├── requirements.txt
 └── vector_db
+=======
+ai-coding-tutor/
+├─ backend/
+│  ├─ main.py           # 主服务入口
+│  ├─ requirements.txt  # 依赖列表
+│  └─ ...
+├─ docker-compose.yml
+├─ .env                 # 环境变量 (本地)
+└─ README.md
+>>>>>>> 192c144b5b58565b1d68b4d4f10694ebce982e67
 ```
 
 ---
