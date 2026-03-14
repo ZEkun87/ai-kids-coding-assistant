@@ -1,0 +1,177 @@
+2026-03-14 01:55:29,753 | INFO | 所有目录初始化完成
+2026-03-14 01:55:29,753 | INFO | ===== 开始下载文档源 =====
+2026-03-14 01:55:29,753 | INFO | 处理文档源: python_official
+2026-03-14 01:55:32,020 | INFO | 下载成功: https://docs.python.org/3/tutorial/index.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_0_6554.html
+2026-03-14 01:55:32,221 | INFO | 下载成功: https://docs.python.org/3/library/index.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_1_2943.html
+2026-03-14 01:55:32,235 | INFO | 下载成功: https://docs.python.org/3/howto/index.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_2_4027.html
+2026-03-14 01:55:32,238 | INFO | URL 列表下载完成：成功 3/3
+2026-03-14 01:55:32,238 | INFO | 处理文档源: github_python_tutorials
+2026-03-14 01:55:35,129 | ERROR | 克隆仓库失败 https://github.com/williamfiset/Python.git: Cmd('git') failed due to: exit code(128)
+  cmdline: git clone -v -- https://github.com/williamfiset/
+2026-03-14 01:55:35,130 | INFO | 处理文档源: markdown_tutorial
+2026-03-14 01:55:36,875 | INFO | 下载成功: https://www.markdownguide.org/basic-syntax/ -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/markdown_tutorial.html
+2026-03-14 01:55:36,875 | INFO | 处理文档源: python_rag_blogs
+2026-03-14 01:55:38,134 | ERROR | 下载失败 https://zhuanlan.zhihu.com/p/642521689: 403 Client Error: Forbidden for url: https://zhuanlan.zhihu.com/p/642521689
+2026-03-14 01:55:38,726 | INFO | 下载成功: https://juejin.cn/post/7350874104511989779 -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_rag_blogs/doc_1_7018.html
+2026-03-14 01:55:38,727 | INFO | URL 列表下载完成：成功 1/2
+2026-03-14 01:55:38,727 | INFO | ===== 所有文档源下载完成 =====
+2026-03-14 01:55:38,727 | INFO | ===== 开始解析与清洗文档 =====
+2026-03-14 01:55:38,729 | ERROR | 加载文件失败 /Users/yuzekun/ai-coding-tutor/data/raw_docs/markdown_tutorial.html: unstructured package not found, please install it with `pip install unstructured`
+2026-03-14 01:55:38,729 | ERROR | 加载文件失败 /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_rag_blogs/doc_1_7018.html: unstructured package not found, please install it with `pip install unstructured`
+2026-03-14 01:55:38,729 | ERROR | 加载文件失败 /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_2_4027.html: unstructured package not found, please install it with `pip install unstructured`
+2026-03-14 01:55:38,729 | ERROR | 加载文件失败 /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_1_2943.html: unstructured package not found, please install it with `pip install unstructured`
+2026-03-14 01:55:38,730 | ERROR | 加载文件失败 /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_0_6554.html: unstructured package not found, please install it with `pip install unstructured`
+2026-03-14 01:55:38,730 | INFO | 文档处理完成：共加载 0 个有效文档
+2026-03-14 01:55:38,730 | ERROR | ❌ 未加载到任何有效文档
+2026-03-14 02:09:21,718 | INFO | 所有目录初始化完成
+2026-03-14 02:09:21,718 | INFO | ===== 开始下载文档源 =====
+2026-03-14 02:09:21,718 | INFO | 处理文档源: python_official
+2026-03-14 02:09:22,940 | INFO | 下载成功: https://docs.python.org/3/tutorial/index.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_0_5289.html
+2026-03-14 02:09:22,970 | INFO | 下载成功: https://docs.python.org/3/library/functions.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_1_2517.html
+2026-03-14 02:09:22,971 | INFO | URL 列表下载完成：成功 2/2
+2026-03-14 02:09:22,971 | INFO | 处理文档源: markdown_tutorial
+2026-03-14 02:09:24,770 | ERROR | 下载失败 https://markdown-guide.readthedocs.io/zh/latest/basic.html: 404 Client Error: Not Found for url: https://markdown-guide.readthedocs.io/zh/latest/basic.html
+2026-03-14 02:09:24,770 | INFO | 处理文档源: python_rag_blogs
+2026-03-14 02:09:26,604 | INFO | 下载成功: https://juejin.cn/post/7350874104511989779 -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_rag_blogs/doc_0_9126.html
+2026-03-14 02:09:26,605 | INFO | URL 列表下载完成：成功 1/1
+2026-03-14 02:09:26,605 | INFO | ===== 所有文档源下载完成 =====
+2026-03-14 02:09:26,605 | INFO | ===== 开始解析与清洗文档 =====
+2026-03-14 02:09:26,971 | INFO | 文档处理完成：共加载 6 个有效文档
+2026-03-14 02:09:26,989 | INFO | 文本切分完成：共生成 273 个文本块
+2026-03-14 02:09:27,266 | ERROR | 构建向量库失败: 1 validation error for DashScopeEmbeddings
+api_key
+  Extra inputs are not permitted [type=extra_forbidden, input_value='sk-e1240d5855d14fceba75c2326158c1c3', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden
+Traceback (most recent call last):
+  File "/Users/yuzekun/ai-coding-tutor/backend/rag/build_db_auto.py", line 299, in build_vector_db
+    embeddings = get_embeddings()
+  File "/Users/yuzekun/ai-coding-tutor/backend/rag/build_db_auto.py", line 270, in get_embeddings
+    return DashScopeEmbeddings(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/pydantic/main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for DashScopeEmbeddings
+api_key
+  Extra inputs are not permitted [type=extra_forbidden, input_value='sk-e1240d5855d14fceba75c2326158c1c3', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden
+2026-03-14 02:11:55,577 | INFO | 所有目录初始化完成
+2026-03-14 02:11:55,578 | INFO | ===== 开始下载文档源 =====
+2026-03-14 02:11:55,578 | INFO | 处理文档源: python_official
+2026-03-14 02:11:56,784 | INFO | 下载成功: https://docs.python.org/3/tutorial/index.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_0_5029.html
+2026-03-14 02:11:56,845 | INFO | 下载成功: https://docs.python.org/3/library/functions.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_1_6113.html
+2026-03-14 02:11:56,846 | INFO | URL 列表下载完成：成功 2/2
+2026-03-14 02:11:56,846 | INFO | 处理文档源: markdown_tutorial
+2026-03-14 02:11:58,026 | ERROR | 下载失败 https://markdown-guide.readthedocs.io/zh/latest/basic.html: 404 Client Error: Not Found for url: https://markdown-guide.readthedocs.io/zh/latest/basic.html
+2026-03-14 02:11:58,027 | INFO | 处理文档源: python_rag_blogs
+2026-03-14 02:12:00,543 | INFO | 下载成功: https://juejin.cn/post/7350874104511989779 -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_rag_blogs/doc_0_4395.html
+2026-03-14 02:12:00,544 | INFO | URL 列表下载完成：成功 1/1
+2026-03-14 02:12:00,544 | INFO | ===== 所有文档源下载完成 =====
+2026-03-14 02:12:00,544 | INFO | ===== 开始解析与清洗文档 =====
+2026-03-14 02:12:01,219 | INFO | 文档处理完成：共加载 8 个有效文档
+2026-03-14 02:12:01,258 | INFO | 文本切分完成：共生成 442 个文本块
+2026-03-14 02:12:01,258 | INFO | 初始化通义千问 Embedding 模型...
+2026-03-14 02:12:01,556 | INFO | 开始构建向量数据库...
+2026-03-14 02:12:12,421 | ERROR | HTTPSConnectionPool(host='dashscope.aliyuncs.com', port=443): Max retries exceeded with url: /api/v1/services/embeddings/text-embedding/text-embedding (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2026-03-14 02:12:12,423 | ERROR | ❌ 构建向量库失败: HTTPSConnectionPool(host='dashscope.aliyuncs.com', port=443): Max retries exceeded with url: /api/v1/services/embeddings/text-embedding/text-embedding (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+Traceback (most recent call last):
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/urllib3/connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/anaconda3/envs/ai/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/opt/anaconda3/envs/ai/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/opt/anaconda3/envs/ai/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/requests/adapters.py", line 644, in send
+    resp = conn.urlopen(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/urllib3/util/retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='dashscope.aliyuncs.com', port=443): Max retries exceeded with url: /api/v1/services/embeddings/text-embedding/text-embedding (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/yuzekun/ai-coding-tutor/backend/rag/build_db_auto.py", line 318, in build_vector_db
+    vectordb = Chroma.from_documents(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/langchain_community/vectorstores/chroma.py", line 887, in from_documents
+    return cls.from_texts(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/langchain_community/vectorstores/chroma.py", line 843, in from_texts
+    chroma_collection.add_texts(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/langchain_community/vectorstores/chroma.py", line 277, in add_texts
+    embeddings = self._embedding_function.embed_documents(texts)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/langchain_community/embeddings/dashscope.py", line 155, in embed_documents
+    embeddings = embed_with_retry(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/langchain_community/embeddings/dashscope.py", line 83, in embed_with_retry
+    return _embed_with_retry(**kwargs)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/tenacity/__init__.py", line 336, in wrapped_f
+    return copy(f, *args, **kw)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/tenacity/__init__.py", line 475, in __call__
+    do = self.iter(retry_state=retry_state)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/tenacity/__init__.py", line 376, in iter
+    result = action(retry_state)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/tenacity/__init__.py", line 398, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+  File "/opt/anaconda3/envs/ai/lib/python3.10/concurrent/futures/_base.py", line 451, in result
+    return self.__get_result()
+  File "/opt/anaconda3/envs/ai/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
+    raise self._exception
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/tenacity/__init__.py", line 478, in __call__
+    result = fn(*args, **kwargs)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/langchain_community/embeddings/dashscope.py", line 66, in _embed_with_retry
+    resp = embeddings.client.call(**kwargs)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/dashscope/embeddings/text_embedding.py", line 52, in call
+    return super().call(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/dashscope/client/base_api.py", line 515, in call
+    return request.call()
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/dashscope/api_entities/http_request.py", line 143, in call
+    output = next(response)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/dashscope/api_entities/http_request.py", line 501, in _handle_request
+    raise e
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/dashscope/api_entities/http_request.py", line 475, in _handle_request
+    response = session.post(
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/anaconda3/envs/ai/lib/python3.10/site-packages/requests/adapters.py", line 671, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='dashscope.aliyuncs.com', port=443): Max retries exceeded with url: /api/v1/services/embeddings/text-embedding/text-embedding (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2026-03-14 02:17:51,606 | INFO | 所有目录初始化完成
+2026-03-14 02:17:51,606 | INFO | ===== 开始下载文档源 =====
+2026-03-14 02:17:51,607 | INFO | 处理文档源: python_official
+2026-03-14 02:17:53,153 | INFO | 下载成功: https://docs.python.org/3/tutorial/index.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_0_1330.html
+2026-03-14 02:17:53,217 | INFO | 下载成功: https://docs.python.org/3/library/functions.html -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_official/doc_1_4122.html
+2026-03-14 02:17:53,218 | INFO | URL 列表下载完成：成功 2/2
+2026-03-14 02:17:53,218 | INFO | 处理文档源: markdown_tutorial
+2026-03-14 02:17:54,936 | ERROR | 下载失败 https://markdown-guide.readthedocs.io/zh/latest/basic.html: 404 Client Error: Not Found for url: https://markdown-guide.readthedocs.io/zh/latest/basic.html
+2026-03-14 02:17:54,937 | INFO | 处理文档源: python_rag_blogs
+2026-03-14 02:17:56,206 | INFO | 下载成功: https://juejin.cn/post/7350874104511989779 -> /Users/yuzekun/ai-coding-tutor/data/raw_docs/python_rag_blogs/doc_0_6515.html
+2026-03-14 02:17:56,207 | INFO | URL 列表下载完成：成功 1/1
+2026-03-14 02:17:56,208 | INFO | ===== 所有文档源下载完成 =====
+2026-03-14 02:17:56,208 | INFO | ===== 开始解析与清洗文档 =====
+2026-03-14 02:17:57,004 | INFO | 文档处理完成：共加载 10 个有效文档
+2026-03-14 02:17:57,045 | INFO | 文本切分完成：共生成 611 个文本块
+2026-03-14 02:17:57,045 | INFO | 初始化通义千问 Embedding 模型...
+2026-03-14 02:17:57,328 | INFO | 开始构建向量数据库...
+2026-03-14 02:18:19,063 | INFO | ✅ 向量库构建完成！总向量数: 611
+2026-03-14 02:18:19,064 | INFO | ===== 全自动 Python 知识库构建完成 =====
+2026-03-14 02:18:19,064 | INFO | 📁 原始文档路径: /Users/yuzekun/ai-coding-tutor/data/raw_docs
+2026-03-14 02:18:19,064 | INFO | 📁 清洗后文档路径: /Users/yuzekun/ai-coding-tutor/data/clean_docs
+2026-03-14 02:18:19,064 | INFO | 📁 向量库路径: /Users/yuzekun/ai-coding-tutor/vector_db/python_kb
+2026-03-14 02:18:19,064 | INFO | 📄 日志文件路径: /Users/yuzekun/ai-coding-tutor/logs/build_kb.log

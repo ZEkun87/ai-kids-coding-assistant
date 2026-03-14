@@ -209,14 +209,35 @@ GET /history?category=python&limit=10
 ## 项目结构示例
 
 ```
-ai-coding-tutor/
-├─ backend/
-│  ├─ main.py           # 主服务入口
-│  ├─ requirements.txt  # 依赖列表
-│  └─ ...
-├─ docker-compose.yml
-├─ .env                 # 环境变量 (本地)
-└─ README.md
+ai-coding-tutor
+│
+├├── backend
+│   ├── __pycache__
+│   │   └── main.cpython-310.pyc   
+│   ├── agents
+│   │   └── tutor_agent.py
+│   ├── main.py          #主服务入口
+│   ├── models           #大模型
+│   │   └── llm.py
+│   ├── rag
+│   │   ├── build_db.py     #向量数据库
+│   │   ├── rag_engine.py     
+│   │   └── vector_store.py
+│   ├── tools
+│   │   ├── code_analyzer.py    
+│   │   ├── doc_search.py
+│   │   └── exercise_generator.py
+│   └── utils
+│       └── prompt.py
+├── data
+│   └── python_docs   #文本解析
+├── docker            #docker部署
+│   └── Dockerfile
+├── frontend
+│   └── react-chat-ui
+├── README.md
+├── requirements.txt
+└── vector_db
 ```
 
 ---

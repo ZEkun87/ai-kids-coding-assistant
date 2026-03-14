@@ -10,6 +10,7 @@ from langchain_community.embeddings import DashScopeEmbeddings
 # ================= 配置 =================
 
 PERSIST_DIR = "/app/vector_db"  # Docker 中最好用绝对路径
+#PERSIST_DIR = "./vector_db"
 COLLECTION_NAME = "knowledge_base"
 EMBEDDING_MODEL = "text-embedding-v1"
 
@@ -84,3 +85,33 @@ def get_retriever(k=3):
     vectordb_client = get_vector_store()
     collection = vectordb_client.get_collection(COLLECTION_NAME)
     return collection.as_retriever(search_kwargs={"k": k})
+
+"""
+if __name__ == "__main__":
+    # 1. 测试 Embedding 生成
+    embeddings = get_embeddings()
+    text = "Python 循环的用法"
+    vector = embeddings.embed_query(text)
+    print(f"文本「{text}」的向量长度：{len(vector)}")  # 输出 768（text-embedding-v1 维度）
+
+    # 2. 测试向量库初始化
+    client = get_vector_store()
+    print(f"向量库集合列表：{[c.name for c in client.list_collections()]}")  # 输出 ['knowledge_base']
+
+    # 3. 测试检索器
+    retriever = get_retriever(k=2)
+    # 先向集合中添加测试数据
+    collection = client.get_collection(COLLECTION_NAME)
+    collection.add(
+        documents=["Python for 循环语法：for i in range(10): print(i)", 
+                   "Python while 循环语法：while 条件: 执行代码"],
+        ids=["doc1", "doc2"],
+        embeddings=[embeddings.embed_query("Python for 循环"), 
+                    embeddings.embed_query("Python while 循环")]
+    )
+    # 检索相似文本
+    results = retriever.get_relevant_documents("Python 循环怎么写")
+    print("检索结果：")
+    for doc in results:
+        print(f"- {doc.page_content}")  # 输出最相似的 2 条文本
+"""
