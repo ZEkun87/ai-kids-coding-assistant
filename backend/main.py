@@ -55,7 +55,58 @@ def save_chat(question, answer, category="default"):
     session.add(ChatRecord(question=question, answer=answer, category=category))
     session.commit()
     session.close()
+# 1. 创建数据库引擎：连接当前目录下的chat_history.db（SQLite文件数据库）
+#    作用：建立Python代码和SQLite数据库的通信通道
+"""
+engine = create_engine("sqlite:///chat_history.db")
 
+# 2. 创建会话工厂：基于上面的引擎，生成可操作数据库的会话类
+#    作用：后续用Session()创建会话，就能执行增删改查
+Session = sessionmaker(bind=engine)
+
+# 3. 创建ORM模型基类：所有数据库表模型都要继承这个基类
+#    作用：让SQLAlchemy识别“哪些类是数据库表”
+Base = declarative_base()
+
+# 4. 定义ChatRecord类（继承Base）：映射数据库中的chat_records表
+class ChatRecord(Base):
+    # 5. 指定该类对应的数据库表名：chat_records
+    __tablename__ = "chat_records"
+    
+    # 6. 定义字段：id（整数类型，主键，唯一标识每条记录，SQLite会自动自增）
+    id = Column(Integer, primary_key=True)
+    
+    # 7. 定义字段：question（字符串类型，存储用户的问题）
+    question = Column(String)
+    
+    # 8. 定义字段：answer（字符串类型，存储AI的回答）
+    answer = Column(String)
+    
+    # 9. 定义字段：category（字符串类型，默认值"default"，存储问题分类）
+    category = Column(String, default="default")
+    
+    # 10. 定义字段：date（时间类型，默认值为当前UTC时间，存储记录创建时间）
+    date = Column(DateTime, default=datetime.utcnow)
+
+# 11. 自动创建表：扫描所有继承Base的类（这里是ChatRecord），在数据库中创建对应的表
+#     特点：如果表已存在，不会重复创建，也不会覆盖原有数据
+Base.metadata.create_all(engine)
+
+# 12. 定义函数：save_chat（封装保存聊天记录的逻辑，方便调用）
+def save_chat(question, answer, category="default"):
+    # 13. 创建数据库会话：相当于打开一个数据库连接
+    session = Session()
+    
+    # 14. 创建ChatRecord实例（对应一条聊天记录），并添加到会话中
+    #     作用：把要保存的数据暂存到会话里，还没真正写入数据库
+    session.add(ChatRecord(question=question, answer=answer, category=category))
+    
+    # 15. 提交会话：把暂存的记录真正写入数据库（这一步才是“保存”的核心）
+    session.commit()
+    
+    # 16. 关闭会话：释放数据库连接（避免资源泄露）
+    session.close()
+"""
 # ---------------- 数据模型 ----------------
 class QuestionRequest(BaseModel):
     question: str
