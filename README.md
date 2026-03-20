@@ -355,104 +355,35 @@ keyword: 循环
 
 ## 企业级项目结构（分层解耦设计）
 ```
-llm-rag-edu-qa-system/
+ai-coding-tutor
 │
-├── backend/                      # 后端核心代码（企业级分层架构）
-│   ├── main.py                   # 服务入口（FastAPI初始化、路由注册）
-│   ├── api/                      # API层（按版本/模块拆分）
-│   │   ├── v1/
-│   │   │   ├── ask.py            # 问答接口
-│   │   │   ├── analyze.py        # 代码分析接口
-│   │   │   ├── exercise.py       # 练习题生成接口
-│   │   │   ├── knowledge.py      # 知识库管理接口
-│   │   │   ├── history.py        # 历史记录接口
-│   │   │   └── system.py         # 系统管理接口
-│   │   └── dependencies.py       # 接口依赖（权限校验、参数校验）
-│   ├── core/                     # 核心配置层
-│   │   ├── config.py             # 全局配置（环境变量、常量）
-│   │   ├── exceptions.py         # 自定义异常及处理
-│   │   ├── logger.py             # 企业级日志配置
-│   │   └── security.py           # 权限/加密/Token处理
-│   ├── service/                  # 业务服务层（核心逻辑）
-│   │   ├── qa_service.py         # 问答核心服务
-│   │   ├── code_analyzer.py      # 代码分析服务
-│   │   ├── exercise_service.py   # 练习题生成服务
-│   │   ├── knowledge_service.py  # 知识库管理服务
-│   │   └── history_service.py    # 历史记录服务
-│   ├── llm/                      # 大模型层（解耦不同模型）
-│   │   ├── base.py               # 大模型抽象基类
-│   │   ├── dashscope_llm.py      # 通义千问实现
-│   │   ├── prompt/               # Prompt工程（企业级模板）
-│   │   │   ├── qa_prompt.py      # 问答Prompt模板
-│   │   │   ├── code_prompt.py    # 代码分析Prompt模板
-│   │   │   └── exercise_prompt.py # 练习题生成Prompt模板
-│   │   └── stream_handler.py     # 流式响应处理
-│   ├── rag/                      # RAG引擎层（企业级优化）
-│   │   ├── vector_store.py       # 向量数据库封装（ChromaDB）
-│   │   ├── rag_engine.py         # RAG核心逻辑（检索+融合）
-│   │   ├── document_processor.py # 文档解析/切分/向量化
-│   │   └── build_db.py           # 知识库构建工具
-│   ├── models/                   # 数据模型层
-│   │   ├── schemas/              # Pydantic模型（接口参数/响应）
-│   │   │   ├── ask.py
-│   │   │   ├── analyze.py
-│   │   │   └── common.py
-│   │   └── orm/                  # ORM模型（数据库表结构）
-│   │       ├── chat_history.py
-│   │       └── knowledge.py
-│   ├── utils/                    # 工具层
-│   │   ├── doc_parser.py         # 多格式文档解析工具
-│   │   ├── tokenizer.py          # 分词/关键词提取工具
-│   │   ├── formatter.py          # 响应格式化工具
-│   │   └── validator.py          # 自定义校验工具
-│   └── middleware/               # 中间件
-│       ├── request_id.py         # 请求ID生成
-│       ├── rate_limit.py         # 限流中间件
-│       └── exception_handler.py  # 全局异常处理
-│
-├── docker/                       # 企业级容器化配置
-│   ├── backend/
-│   │   ├── Dockerfile            # 后端镜像（多阶段构建）
-│   │   └── entrypoint.sh         # 启动脚本
-│   ├── nginx/
-│   │   ├── nginx.conf            # Nginx反向代理配置
-│   │   └── Dockerfile
-│   ├── redis/
-│   │   └── redis.conf            # Redis配置
-│   └── docker-compose.yml        # 企业级服务编排
-│
-├── data/                         # 数据目录
-│   ├── docs/                     # 原始文档
-│   │   └── python/               # 编程知识库文档
-│   └── db/                       # 数据库文件
-│       └── chat_history.db       # 聊天记录数据库
-│
-├── monitoring/                   # 监控配置
-│   ├── prometheus.yml
-│   └── grafana/
-│       └── dashboards/           # 可视化大盘
-│
-├── frontend/                     # 前端工程（企业级React架构）
-│   ├── public/
-│   ├── src/
-│   │   ├── api/                  # API请求封装
-│   │   ├── components/           # 通用组件
-│   │   ├── pages/                # 业务页面
-│   │   └── utils/                # 前端工具
-│   └── package.json
-│
-├── tests/                        # 企业级测试用例
-│   ├── unit/                     # 单元测试
-│   ├── integration/              # 集成测试
-│   └── load/                     # 性能测试
-│
-├── vector_db/                    # 向量数据库存储（.gitignore）
-├── logs/                         # 日志目录（.gitignore）
-├── .env.example                  # 环境变量示例
-├── .gitignore                    # Git忽略规则（企业级）
-├── requirements.txt              # 依赖清单（分开发/生产）
-├── requirements-prod.txt
-└── README.md                     # 企业级文档
+├├── backend                        # 后端核心代码（企业级分层架构）
+│   ├── __pycache__
+│   │   └── main.cpython-310.pyc
+│   ├── agents
+│   │   └── tutor_agent.py
+│   ├── main.py                     # 服务入口（FastAPI初始化、路由注册）
+│   ├── models                      # 数据模型层
+│   │   └── llm.py
+│   ├── rag                         # RAG引擎层（企业级优化）
+│   │   ├── build_db.py
+│   │   ├── rag_engine.py
+│   │   └── vector_store.py
+│   ├── tools
+│   │   ├── code_analyzer.py        # 代码分析服务
+│   │   ├── doc_search.py
+│   │   └── exercise_generator.py
+│   └── utils
+│       └── prompt.py
+├── data
+│   └── python_docs
+├── docker                         # 企业级容器化配置
+│   └── Dockerfile
+├── frontend
+│   └── react-chat-ui
+├── README.md                      # 企业级文档
+├── requirements.txt
+└── vector_db 
 ```
 
 ---
