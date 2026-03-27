@@ -429,40 +429,34 @@ keyword: 循环
 ---
 企业级项目结构（分层解耦设计）
 ai-coding-tutor/
-│
-├── backend/                    # 后端核心（企业级分层架构）
-│   ├── main.py                 # 服务入口
-│   ├── agent/                  # 智能代理核心（含graph.py、runner.py、state.py及nodes子目录）
-│   ├── agents/                 # Agent服务封装（tutor_agent.py）
-│   ├── app/services/           # 业务服务层
-│   ├── chat_history.db         # 聊天记录数据库
-│   ├── chroma_db/              # 开发环境向量库
-│   ├── data/                   # 本地数据存储
-│   ├── Dockerfile              # 后端容器配置
-│   ├── models/                 # 数据模型层（llm.py）
-│   ├── packages/               # 离线依赖存储
-│   ├── rag/                    # RAG引擎层（核心文件齐全）
-│   ├── requirements.txt        # 后端依赖
-│   ├── tools/                  # 工具层（代码分析、检索等）
-│   ├── utils/                  # 通用工具（prompt.py）
-│   ├── vector_db/              # 生产环境向量库
-│   └── vendor/                 # 第三方依赖
-│
-├── docker/                     # 容器化配置（可选）
-├── docker-compose.yml          # 服务编排
-│
-├── data/                       # 全局数据目录（clean_docs/、python_docs/、raw_docs/）
-│
-├── frontend/                   # 前端工程（react-chat-ui、vite-project）
-│
-├── logs/                       # 运维日志目录
-├── vector_db/                  # 全局向量库（.gitignore）
-│
-├── .gitignore                  # Git忽略规则
-├── package.json                # 前端依赖（根目录）
-├── package-lock.json           # 前端依赖锁文件
-├── README.md                   # 项目文档
-└── requirements.txt            # 全局依赖清单
+├── backend/                          # 后端核心（企业级分层架构）
+│   ├── main.py                      # 服务入口
+│   ├── agent/                       # 智能代理核心（含graph.py、runner.py、state.py及nodes子目录）
+│   ├── agents/                      # Agent服务封装（tutor_agent.py）
+│   ├── app/services/                # 业务服务层
+│   ├── chat_history.db              # 聊天记录数据库
+│   ├── chroma_db/                   # 开发环境向量库
+│   ├── data/                        # 本地数据存储
+│   ├── Dockerfile                   # 后端容器配置
+│   ├── models/                      # 数据模型层（llm.py）
+│   ├── packages/                    # 离线依赖存储
+│   ├── rag/                         # RAG引擎层（核心文件齐全）
+│   ├── requirements.txt             # 后端依赖
+│   ├── tools/                       # 工具层（代码分析、检索等）
+│   ├── utils/                       # 通用工具（prompt.py）
+│   ├── vector_db/                   # 生产环境向量库
+│   └── vendor/                      # 第三方依赖
+├── docker/                          # 容器化配置（可选）
+│   ├── docker-compose.yml           # 服务编排
+│   └── data/                        # 全局数据目录（clean_docs/、python_docs/、raw_docs/）
+├── frontend/                        # 前端工程（react-chat-ui、vite-project）
+├── logs/                            # 运维日志目录
+├── vector_db/                       # 全局向量库（.gitignore）
+├── .gitignore                       # Git忽略规则
+├── package.json                     # 前端依赖（根目录）
+├── package-lock.json                # 前端依赖锁文件
+├── README.md                        # 项目文档
+└── requirements.txt                 # 全局依赖清单
 ---
 企业级运维指南
 
