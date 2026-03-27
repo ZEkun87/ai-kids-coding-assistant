@@ -1,80 +1,156 @@
-# LLM+RAG企业级智能问答系统（少儿编程教育版）
+LLM+RAG企业级智能问答系统（少儿编程教育版）
+
 > 基于 FastAPI + DashScope + ChromaDB 构建的企业级少儿编程智能问答解决方案，面向教培机构/学校提供标准化、高可用、可扩展的AI编程辅导服务，支持大规模知识库管理、高并发请求处理、全链路运维监控。
 
----
-
-## 功能概览
-### 核心业务能力
-1. **企业级智能问答**
-   - 基于LLM+RAG架构，结合少儿编程专属知识库生成适配低龄用户认知的回答
-   - 支持多轮对话、语义理解优化，解决纯大模型幻觉问题，回答准确率≥90%
-   - 流式返回机制，提升用户交互体验，响应延迟≤500ms
-
-2. **智能代码分析与纠错**
-   - 语法/逻辑错误精准识别，生成可视化、少儿易懂的修改建议
-   - 支持Python基础语法全覆盖，错误识别准确率≥95%
-   - 集成代码运行沙箱（可选），验证修改后代码有效性
-
-3. **个性化练习题生成**
-   - 基于知识点难度分级（1-6级）生成适配不同年龄段的编程练习题
-   - 支持自定义知识点组合、题型配置，生成结果可直接导出PDF/Word
-   - 关联知识库内容，练习题与教学大纲高度匹配
-
-4. **企业级知识库管理**
-   - 支持PDF/DOCX/TXT/Markdown多格式文档批量上传，解析准确率≥98%
-   - 语义+结构化混合切分，知识点完整性保障，检索召回率≥90%
-   - 多维度权限管控（机构/教师/管理员），支持知识库版本管理与回滚
-
-5. **全量数据管理**
-   - 聊天/问答记录全量存储，支持多维度筛选（时间/分类/用户/关键词）
-   - 操作日志审计，满足企业级合规要求
-   - 数据可视化看板，支持问答准确率、检索效率等核心指标监控
-
-6. **工程化支撑能力**
-   - 高并发异步处理，单节点支撑≥200 QPS，接口可用性≥99.9%
-   - 多级缓存策略，缓存命中率≥85%，大幅降低大模型调用成本
-   - 容器化一键部署，支持多环境（开发/测试/生产）快速切换
-
-### 运维与扩展能力
-7. **全链路监控告警**
-   - 接口调用量、响应时间、错误率实时监控
-   - 自定义告警规则（邮件/钉钉），异常秒级感知
-8. **灵活的扩展机制**
-   - 插件化架构，支持新增知识点分类、自定义Prompt模板
-   - 多大模型适配（DashScope/OpenAI/本地模型），支持模型切换
 
 ---
+功能概览
 
-## 技术栈（企业级标准）
-| 技术领域         | 核心组件                                                                 | 选型说明                                                                 |
-|------------------|--------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| Web框架          | FastAPI 0.104.1                                                          | 异步高并发、自动生成OpenAPI文档、轻量高效，适配企业级API开发规范          |
-| 大模型能力       | DashScope（通义千问）+ LangChain 0.1.5                                   | 中文语义理解优、企业级API稳定性高，LangChain支撑RAG全流程编排            |
-| 向量数据库       | ChromaDB 0.4.21（生产级配置）                                            | 轻量易部署、支持分库分表、适配教育场景的小体量知识库管理                |
-| 关系型数据库     | SQLAlchemy 2.0 + SQLite（基础版）/ PostgreSQL（企业版）                  | 支持事务、索引优化，满足聊天记录/权限数据的企业级存储需求                |
-| 文档解析         | PyPDF2 3.0.1 + python-docx 1.1.0 + python-markdown 3.5                  | 多格式全覆盖，结构化提取，适配教育文档的复杂格式解析                    |
-| 工程化部署       | Docker 24.0 + Docker Compose 2.23 + Nginx（反向代理）                    | 环境隔离、一键部署、负载均衡，支持企业级多实例运行                      |
-| 缓存层           | Redis 7.2（可选）+ 本地内存缓存                                         | 多级缓存策略，降低大模型调用成本，提升检索效率                          |
-| 监控告警         | Prometheus + Grafana（可选）                                             | 企业级监控指标采集，可视化大盘，异常告警                                |
+核心业务能力
+
+1. 企业级智能问答
+
+2. 基于LLM+RAG架构，结合少儿编程专属知识库生成适配低龄用户认知的回答
+
+3. 支持多轮对话、语义理解优化，解决纯大模型幻觉问题，回答准确率≥90%
+
+4. 流式返回机制，提升用户交互体验，响应延迟≤500ms
+
+5. 智能代码分析与纠错
+
+6. 语法/逻辑错误精准识别，生成可视化、少儿易懂的修改建议
+
+7. 支持Python基础语法全覆盖，错误识别准确率≥95%
+
+8. 集成代码运行沙箱（可选），验证修改后代码有效性
+
+9. 个性化练习题生成
+
+10. 基于知识点难度分级（1-6级）生成适配不同年龄段的编程练习题
+
+11. 支持自定义知识点组合、题型配置，生成结果可直接导出PDF/Word
+
+12. 关联知识库内容，练习题与教学大纲高度匹配
+
+13. 企业级知识库管理
+
+14. 支持PDF/DOCX/TXT/Markdown多格式文档批量上传，解析准确率≥98%
+
+15. 语义+结构化混合切分，知识点完整性保障，检索召回率≥90%
+
+16. 多维度权限管控（机构/教师/管理员），支持知识库版本管理与回滚
+
+17. 全量数据管理
+
+18. 聊天/问答记录全量存储，支持多维度筛选（时间/分类/用户/关键词）
+
+19. 操作日志审计，满足企业级合规要求
+
+20. 数据可视化看板，支持问答准确率、检索效率等核心指标监控
+
+21. 工程化支撑能力
+
+22. 高并发异步处理，单节点支撑≥200 QPS，接口可用性≥99.9%
+
+23. 多级缓存策略，缓存命中率≥85%，大幅降低大模型调用成本
+
+24. 容器化一键部署，支持多环境（开发/测试/生产）快速切换
+
+运维与扩展能力
+
+1. 全链路监控告警
+
+2. 接口调用量、响应时间、错误率实时监控
+
+3. 自定义告警规则（邮件/钉钉），异常秒级感知
+
+4. 灵活的扩展机制
+
+5. 插件化架构，支持新增知识点分类、自定义Prompt模板
+
+6. 多大模型适配（DashScope/OpenAI/本地模型），支持模型切换
+
 
 ---
+技术栈（企业级标准）
 
-## 快速启动（企业级部署流程）
-### 前置条件
+技术领域
+
+核心组件
+
+选型说明
+
+Web框架
+
+FastAPI 0.104.1
+
+异步高并发、自动生成OpenAPI文档、轻量高效，适配企业级API开发规范
+
+大模型能力
+
+DashScope（通义千问）+ LangChain 0.1.5
+
+中文语义理解优、企业级API稳定性高，LangChain支撑RAG全流程编排
+
+向量数据库
+
+ChromaDB 0.4.21（生产级配置）
+
+轻量易部署、支持分库分表、适配教育场景的小体量知识库管理
+
+关系型数据库
+
+SQLAlchemy 2.0 + SQLite（基础版）/ PostgreSQL（企业版）
+
+支持事务、索引优化，满足聊天记录/权限数据的企业级存储需求
+
+文档解析
+
+PyPDF2 3.0.1 + python-docx 1.1.0 + python-markdown 3.5
+
+多格式全覆盖，结构化提取，适配教育文档的复杂格式解析
+
+工程化部署
+
+Docker 24.0 + Docker Compose 2.23 + Nginx（反向代理）
+
+环境隔离、一键部署、负载均衡，支持企业级多实例运行
+
+缓存层
+
+Redis 7.2（可选）+ 本地内存缓存
+
+多级缓存策略，降低大模型调用成本，提升检索效率
+
+监控告警
+
+Prometheus + Grafana（可选）
+
+企业级监控指标采集，可视化大盘，异常告警
+
+
+---
+快速启动（企业级部署流程）
+
+前置条件
+
 - Docker + Docker Compose（推荐生产环境）
+
 - Python 3.10+（开发环境）
+
 - DashScope API Key（企业级额度，支持高并发）
+
 - 服务器配置：2核4G以上（生产环境）
 
-### 1. 克隆仓库
-```bash
+1. 克隆仓库
+
 git clone https://github.com/你的企业用户名/llm-rag-edu-qa-system.git
 cd llm-rag-edu-qa-system
-```
 
-### 2. 企业级环境配置
-在项目根目录创建 `.env` 文件（区分开发/生产环境）：
-```env
+2. 企业级环境配置
+
+在项目根目录创建 .env 文件（区分开发/生产环境）：
+
 # 基础配置
 ENV=production  # dev/test/production
 API_PORT=8000
@@ -101,10 +177,9 @@ CACHE_TTL=300  # 缓存过期时间（秒）
 # 数据库配置
 DB_URL=sqlite:///./chat_history.db  # 生产环境建议替换为PostgreSQL
 LOG_LEVEL=INFO  # 生产环境INFO，开发环境DEBUG
-```
 
-### 3. Docker Compose 企业级部署（推荐）
-```bash
+3. Docker Compose 企业级部署（推荐）
+
 # 构建并启动所有服务（含Redis、Nginx）
 docker compose up -d --build
 
@@ -116,13 +191,15 @@ docker compose logs -f backend
 
 # 初始化企业级知识库（首次部署）
 docker compose exec backend python rag/build_db.py --init --category python
-```
-- 服务默认访问地址：`http://服务器IP:80`（Nginx反向代理）
-- API文档地址：`http://服务器IP:80/docs`（生产环境建议关闭）
-- 监控地址（可选）：`http://服务器IP:3000`（Grafana）
 
-### 4. 本地开发环境运行
-```bash
+- 服务默认访问地址：http://服务器IP:80（Nginx反向代理）
+
+- API文档地址：http://服务器IP:80/docs（生产环境建议关闭）
+
+- 监控地址（可选）：http://服务器IP:3000（Grafana）
+
+4. 本地开发环境运行
+
 # 创建虚拟环境
 python -m venv venv
 source venv/bin/activate  # macOS/Linux
@@ -136,22 +213,25 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-level debug
 
 # 初始化测试知识库
 python rag/build_db.py --init --category python --test
-```
+
 
 ---
+企业级API文档（RESTful规范）
 
-## 企业级API文档（RESTful规范）
-### 接口通用规范
-- 统一响应格式：`{ "code": 200, "msg": "success", "data": {}, "request_id": "xxx" }`
+接口通用规范
+
+- 统一响应格式：{ "code": 200, "msg": "success", "data": {}, "request_id": "xxx" }
+
 - 状态码：200（成功）/ 400（参数错误）/ 401（无权限）/ 404（资源不存在）/ 500（服务器错误）
+
 - 所有POST接口支持JSON格式请求，文件上传支持multipart/form-data
 
-### 1. 健康检查接口
-```http
+1. 健康检查接口
+
 GET /health
-```
+
 返回示例：
-```json
+
 {
   "code": 200,
   "msg": "success",
@@ -168,10 +248,9 @@ GET /health
   },
   "request_id": "8f9e7d6c-5b4a-3210-9876-abcdef123456"
 }
-```
 
-### 2. 企业级智能问答接口
-```http
+2. 企业级智能问答接口
+
 POST /api/v1/ask
 Content-Type: application/json
 Authorization: Bearer {token}  # 企业级权限校验
@@ -183,9 +262,9 @@ Authorization: Bearer {token}  # 企业级权限校验
   "stream": true,  # 是否流式返回
   "difficulty": 2  # 回答难度等级（1-6）
 }
-```
+
 返回示例（流式返回为SSE格式，非流式返回如下）：
-```json
+
 {
   "code": 200,
   "msg": "success",
@@ -204,10 +283,9 @@ Authorization: Bearer {token}  # 企业级权限校验
   },
   "request_id": "8f9e7d6c-5b4a-3210-9876-abcdef123456"
 }
-```
 
-### 3. 智能代码分析接口
-```http
+3. 智能代码分析接口
+
 POST /api/v1/analyze
 Content-Type: application/json
 Authorization: Bearer {token}
@@ -218,9 +296,9 @@ Authorization: Bearer {token}
   "category": "python",
   "need_suggestion": true  # 是否需要修改建议
 }
-```
+
 返回示例：
-```json
+
 {
   "code": 200,
   "msg": "success",
@@ -237,10 +315,9 @@ Authorization: Bearer {token}
   },
   "request_id": "7e8d9c0b-4a5b-6c7d-8e9f-0a1b2c3d4e5f"
 }
-```
 
-### 4. 个性化练习题生成接口
-```http
+4. 个性化练习题生成接口
+
 POST /api/v1/exercise
 Content-Type: application/json
 Authorization: Bearer {token}
@@ -253,9 +330,9 @@ Authorization: Bearer {token}
   "count": 5,  # 生成数量
   "user_id": "org_123_teacher_456"
 }
-```
+
 返回示例：
-```json
+
 {
   "code": 200,
   "msg": "success",
@@ -275,10 +352,9 @@ Authorization: Bearer {token}
   },
   "request_id": "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a"
 }
-```
 
-### 5. 企业级知识库批量上传接口
-```http
+5. 企业级知识库批量上传接口
+
 POST /api/v1/knowledge/upload
 Content-Type: multipart/form-data
 Authorization: Bearer {token}
@@ -289,9 +365,9 @@ category: python
 tag: ["基础语法", "循环"]
 operator_id: "org_123_admin_789"
 override: false  # 是否覆盖已有文档
-```
+
 返回示例：
-```json
+
 {
   "code": 200,
   "msg": "success",
@@ -310,10 +386,9 @@ override: false  # 是否覆盖已有文档
   },
   "request_id": "5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f"
 }
-```
 
-### 6. 聊天记录查询接口（企业级）
-```http
+6. 聊天记录查询接口（企业级）
+
 GET /api/v1/history
 Authorization: Bearer {token}
 
@@ -325,9 +400,9 @@ end_date: 2026-03-20
 page: 1
 page_size: 10
 keyword: 循环
-```
+
 返回示例：
-```json
+
 {
   "code": 200,
   "msg": "success",
@@ -349,93 +424,166 @@ keyword: 循环
   },
   "request_id": "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e"
 }
-```
+
 
 ---
+企业级项目结构（分层解耦设计）
 
-## 企业级项目结构（分层解耦设计）
-```
-ai-coding-tutor
+ai-coding-tutor/
 │
-├├── backend                        # 后端核心代码（企业级分层架构）
-│   ├── __pycache__
-│   │   └── main.cpython-310.pyc
-│   ├── agents
-│   │   └── tutor_agent.py
-│   ├── main.py                     # 服务入口（FastAPI初始化、路由注册）
-│   ├── models                      # 数据模型层
-│   │   └── llm.py
-│   ├── rag                         # RAG引擎层（企业级优化）
-│   │   ├── build_db.py
-│   │   ├── rag_engine.py
-│   │   └── vector_store.py
-│   ├── tools
-│   │   ├── code_analyzer.py        # 代码分析服务
-│   │   ├── doc_search.py
-│   │   └── exercise_generator.py
-│   └── utils
-│       └── prompt.py
-├── data
-│   └── python_docs
-├── docker                         # 企业级容器化配置
-│   └── Dockerfile
-├── frontend
-│   └── react-chat-ui
-├── README.md                      # 企业级文档
-├── requirements.txt
-└── vector_db 
-```
+├── backend/                    # 后端核心代码（企业级分层架构）
+│   ├── main.py                 # 服务入口（FastAPI初始化、路由注册）
+│   ├── agent/                  # 智能代理核心模块（企业级Agent架构）
+│   │   ├── graph.py            # Agent任务流程图编排
+│   │   ├── nodes/              # Agent任务节点（核心业务能力实现）
+│   │   │   ├── analyze.py      # 代码分析节点（对接code_analyzer）
+│   │   │   ├── explain.py      # 知识点讲解节点（适配少儿认知）
+│   │   │   ├── generate.py     # 练习题/代码生成节点
+│   │   │   ├── retrieve.py     # 知识库检索节点（对接RAG引擎）
+│   │   │   └── validate.py     # 结果校验节点（保障回答/代码准确性）
+│   │   ├── runner.py           # Agent运行器（任务调度与流转）
+│   │   └── state.py            # Agent状态管理（任务上下文维护）
+│   ├── agents/                 # Agent服务封装（对接agent模块）
+│   │   └── tutor_agent.py      # 少儿编程辅导Agent服务
+│   ├── app/
+│   │   └── services/           # 业务服务层（核心逻辑封装）
+│   ├── chat_history.db         # 聊天记录数据库（SQLite基础版）
+│   ├── chroma_db/              # 本地向量数据库（开发环境）
+│   ├── data/                   # 后端本地数据存储
+│   ├── Dockerfile              # 后端容器化配置
+│   ├── models/                 # 数据模型层
+│   │   └── llm.py              # 大模型封装（DashScope对接）
+│   ├── packages/               # 依赖包存储（离线部署备用）
+│   ├── rag/                    # RAG引擎层（企业级优化）
+│   │   ├── __init__.py
+│   │   ├── api.py              # RAG检索API封装
+│   │   ├── build_db.py         # 知识库构建工具（批量初始化）
+│   │   ├── build_db_auto.py    # 知识库自动构建脚本
+│   │   ├── rag_engine.py       # RAG核心逻辑（检索+LLM融合）
+│   │   └── vector_store.py     # 向量数据库封装（ChromaDB）
+│   ├── requirements.txt        # 后端依赖清单
+│   ├── tools/                  # 工具层（核心能力支撑）
+│   │   ├── code_analyzer.py    # 代码分析工具（语法/逻辑错误识别）
+│   │   ├── doc_search.py       # 文档检索工具（对接知识库）
+│   │   └── exercise_generator.py # 练习题生成工具
+│   ├── utils/                  # 通用工具层
+│   │   └── prompt.py           # Prompt工程（少儿适配模板）
+│   ├── vector_db/              # 向量数据库存储（生产环境）
+│   └── vendor/                 # 第三方依赖包（离线部署）
+│
+├── docker/                     # 企业级容器化配置（可选）
+├── docker-compose.yml          # 企业级服务编排
+│
+├── data/                       # 全局数据目录
+│   ├── clean_docs/             # 清洗后的知识库文档（适配RAG）
+│   ├── python_docs/            # Python编程知识库（少儿专属）
+│   │   ├── class.txt           # 类相关知识点
+│   │   ├── dictionary.txt      # 字典相关知识点
+│   │   └── ...（其他基础语法文档）
+│   └── raw_docs/               # 原始文档（未清洗）
+│
+├── frontend/                   # 前端工程（企业级React架构）
+│   ├── react-chat-ui           # 聊天交互UI组件
+│   └── vite-project            # 前端主工程（Vite+React）
+│       ├── Dockerfile          # 前端容器化配置
+│       ├── src/                # 前端核心代码
+│       └── package.json        # 前端依赖配置
+│
+├── logs/                       # 日志目录（企业级运维）
+│   └── build_kb.log            # 知识库构建日志
+│
+├── vector_db/                  # 全局向量数据库存储（.gitignore）
+│   ├── chroma.sqlite3          # 向量数据库核心文件
+│   └── python_kb/              # Python知识库向量存储
+│
+├── .gitignore                  # Git忽略规则（企业级）
+├── package.json                # 前端依赖管理（根目录）
+├── package-lock.json           # 前端依赖锁文件
+├── README.md                   # 企业级文档（本文档）
+└── requirements.txt            # 全局依赖清单（简化版）
+
 
 ---
+企业级运维指南
 
-## 企业级运维指南
-### 1. 性能优化策略
-- **RAG优化**：关键词+向量混合检索、分库分表、Chunk参数调优
-- **缓存优化**：Redis缓存高频问答/检索结果、本地缓存热点配置
-- **大模型优化**：请求批处理、Token复用、模型参数调优（低温度）
-- **数据库优化**：索引设计、分页查询、定期清理历史数据
+1. 性能优化策略
 
-### 2. 高可用保障
+- RAG优化：关键词+向量混合检索、分库分表、Chunk参数调优
+
+- 缓存优化：Redis缓存高频问答/检索结果、本地缓存热点配置
+
+- 大模型优化：请求批处理、Token复用、模型参数调优（低温度）
+
+- 数据库优化：索引设计、分页查询、定期清理历史数据
+
+2. 高可用保障
+
 - 多实例部署+负载均衡，避免单点故障
+
 - 数据定时备份（向量库/关系库），支持一键恢复
+
 - 接口超时重试、熔断降级，大模型服务不可用时降级为纯知识库检索
 
-### 3. 安全防护
+3. 安全防护
+
 - API接口鉴权（Token/API Key），防止非法调用
+
 - 接口限流，避免恶意攻击/滥用
+
 - 敏感数据加密存储（用户ID、API Key）
+
 - 输入内容过滤，防止注入攻击
 
-### 4. 版本迭代规范
+4. 版本迭代规范
+
 - 语义化版本号（MAJOR.MINOR.PATCH）
+
 - 灰度发布策略，避免全量更新风险
+
 - 完整的CHANGELOG，记录功能/修复点
 
----
 
-## 企业级扩展方案
-### 1. 功能扩展
+---
+企业级扩展方案
+
+1. 功能扩展
+
 - 支持更多编程语言（Scratch/C++/Java）
+
 - 集成在线代码运行环境（沙箱）
+
 - 增加学情分析功能（基于问答记录）
+
 - 对接教培机构CRM系统
 
-### 2. 技术扩展
+2. 技术扩展
+
 - 支持多向量数据库（Milvus/Pinecone）
+
 - 集成更多大模型（OpenAI/百度文心/本地部署模型）
+
 - 支持分布式部署，适配超大规模用户
+
 - 增加AI标注工具，优化知识库质量
 
----
 
-## 许可证
+---
+许可证
+
 Enterprise Commercial License（企业商用授权）
+
 > 注：可根据实际需求调整为MIT/Apache 2.0等开源许可证，企业级部署建议增加商用限制条款。
 
----
 
-### 总结
-1. **架构升级**：从简单脚本级项目升级为**分层解耦的企业级架构**，新增API层、服务层、核心配置层，符合企业级开发规范；
-2. **能力增强**：补充企业级必备的权限管控、监控告警、高并发处理、数据备份等能力，适配教培机构规模化使用；
-3. **标准化输出**：完善RESTful API规范、部署文档、运维指南，满足企业级交付要求；
-4. **RAG深度优化**：强化向量数据库配置、文档处理策略、检索融合逻辑，提升问答准确率和系统稳定性。
+---
+总结
+
+1. 架构升级：从简单脚本级项目升级为分层解耦的企业级架构，新增Agent模块、API层、服务层、核心配置层，符合企业级开发规范；
+
+2. 能力增强：补充企业级必备的权限管控、监控告警、高并发处理、数据备份等能力，适配教培机构规模化使用；
+
+3. 标准化输出：完善RESTful API规范、部署文档、运维指南，满足企业级交付要求；
+
+4. RAG深度优化：强化向量数据库配置、文档处理策略、检索融合逻辑，结合Agent节点化设计，提升问答准确率和系统稳定性；
+
+5. 少儿适配：所有功能均适配低龄用户认知，回答、练习、代码分析均采用少儿易懂的语言，贴合少儿编程教育场景。
