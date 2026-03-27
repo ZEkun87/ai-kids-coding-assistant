@@ -1,8 +1,10 @@
+# 企业级AI智能问答系统（RAG + Agent）- 少儿编程教育版
+
 ## 🚀 功能概览
 
 ### 🧠 核心业务能力
 
-#### 1. 企业级AI智能问答系统（RAG + Agent）
+#### 
 - 基于 LLM + RAG 架构，结合少儿编程专属知识库生成适配低龄用户认知的回答
 - 支持多轮对话与上下文理解，有效降低大模型幻觉问题，回答准确率 ≥ 90%
 - 支持流式返回（Streaming），优化用户交互体验，平均响应延迟 ≤ 500ms
@@ -426,81 +428,41 @@ keyword: 循环
 
 ---
 企业级项目结构（分层解耦设计）
-
 ai-coding-tutor/
 │
-├── backend/                    # 后端核心代码（企业级分层架构）
-│   ├── main.py                 # 服务入口（FastAPI初始化、路由注册）
-│   ├── agent/                  # 智能代理核心模块（企业级Agent架构）
-│   │   ├── graph.py            # Agent任务流程图编排
-│   │   ├── nodes/              # Agent任务节点（核心业务能力实现）
-│   │   │   ├── analyze.py      # 代码分析节点（对接code_analyzer）
-│   │   │   ├── explain.py      # 知识点讲解节点（适配少儿认知）
-│   │   │   ├── generate.py     # 练习题/代码生成节点
-│   │   │   ├── retrieve.py     # 知识库检索节点（对接RAG引擎）
-│   │   │   └── validate.py     # 结果校验节点（保障回答/代码准确性）
-│   │   ├── runner.py           # Agent运行器（任务调度与流转）
-│   │   └── state.py            # Agent状态管理（任务上下文维护）
-│   ├── agents/                 # Agent服务封装（对接agent模块）
-│   │   └── tutor_agent.py      # 少儿编程辅导Agent服务
-│   ├── app/
-│   │   └── services/           # 业务服务层（核心逻辑封装）
-│   ├── chat_history.db         # 聊天记录数据库（SQLite基础版）
-│   ├── chroma_db/              # 本地向量数据库（开发环境）
-│   ├── data/                   # 后端本地数据存储
-│   ├── Dockerfile              # 后端容器化配置
-│   ├── models/                 # 数据模型层
-│   │   └── llm.py              # 大模型封装（DashScope对接）
-│   ├── packages/               # 依赖包存储（离线部署备用）
-│   ├── rag/                    # RAG引擎层（企业级优化）
-│   │   ├── __init__.py
-│   │   ├── api.py              # RAG检索API封装
-│   │   ├── build_db.py         # 知识库构建工具（批量初始化）
-│   │   ├── build_db_auto.py    # 知识库自动构建脚本
-│   │   ├── rag_engine.py       # RAG核心逻辑（检索+LLM融合）
-│   │   └── vector_store.py     # 向量数据库封装（ChromaDB）
-│   ├── requirements.txt        # 后端依赖清单
-│   ├── tools/                  # 工具层（核心能力支撑）
-│   │   ├── code_analyzer.py    # 代码分析工具（语法/逻辑错误识别）
-│   │   ├── doc_search.py       # 文档检索工具（对接知识库）
-│   │   └── exercise_generator.py # 练习题生成工具
-│   ├── utils/                  # 通用工具层
-│   │   └── prompt.py           # Prompt工程（少儿适配模板）
-│   ├── vector_db/              # 向量数据库存储（生产环境）
-│   └── vendor/                 # 第三方依赖包（离线部署）
+├── backend/                    # 后端核心（企业级分层架构）
+│   ├── main.py                 # 服务入口
+│   ├── agent/                  # 智能代理核心（含graph.py、runner.py、state.py及nodes子目录）
+│   ├── agents/                 # Agent服务封装（tutor_agent.py）
+│   ├── app/services/           # 业务服务层
+│   ├── chat_history.db         # 聊天记录数据库
+│   ├── chroma_db/              # 开发环境向量库
+│   ├── data/                   # 本地数据存储
+│   ├── Dockerfile              # 后端容器配置
+│   ├── models/                 # 数据模型层（llm.py）
+│   ├── packages/               # 离线依赖存储
+│   ├── rag/                    # RAG引擎层（核心文件齐全）
+│   ├── requirements.txt        # 后端依赖
+│   ├── tools/                  # 工具层（代码分析、检索等）
+│   ├── utils/                  # 通用工具（prompt.py）
+│   ├── vector_db/              # 生产环境向量库
+│   └── vendor/                 # 第三方依赖
 │
-├── docker/                     # 企业级容器化配置（可选）
-├── docker-compose.yml          # 企业级服务编排
+├── docker/                     # 容器化配置（可选）
+├── docker-compose.yml          # 服务编排
 │
-├── data/                       # 全局数据目录
-│   ├── clean_docs/             # 清洗后的知识库文档（适配RAG）
-│   ├── python_docs/            # Python编程知识库（少儿专属）
-│   │   ├── class.txt           # 类相关知识点
-│   │   ├── dictionary.txt      # 字典相关知识点
-│   │   └── ...（其他基础语法文档）
-│   └── raw_docs/               # 原始文档（未清洗）
+├── data/                       # 全局数据目录（clean_docs/、python_docs/、raw_docs/）
 │
-├── frontend/                   # 前端工程（企业级React架构）
-│   ├── react-chat-ui           # 聊天交互UI组件
-│   └── vite-project            # 前端主工程（Vite+React）
-│       ├── Dockerfile          # 前端容器化配置
-│       ├── src/                # 前端核心代码
-│       └── package.json        # 前端依赖配置
+├── frontend/                   # 前端工程（react-chat-ui、vite-project）
 │
-├── logs/                       # 日志目录（企业级运维）
-│   └── build_kb.log            # 知识库构建日志
+├── logs/                       # 运维日志目录
+├── vector_db/                  # 全局向量库（.gitignore）
 │
-├── vector_db/                  # 全局向量数据库存储（.gitignore）
-│   ├── chroma.sqlite3          # 向量数据库核心文件
-│   └── python_kb/              # Python知识库向量存储
-│
-├── .gitignore                  # Git忽略规则（企业级）
-├── package.json                # 前端依赖管理（根目录）
+├── .gitignore                  # Git忽略规则
+├── package.json                # 前端依赖（根目录）
 ├── package-lock.json           # 前端依赖锁文件
-├── README.md                   # 企业级文档（本文档）
-└── requirements.txt            # 全局依赖清单（简化版）
-
-
+├── README.md                   # 项目文档
+└── requirements.txt            # 全局依赖清单
 ---
 企业级运维指南
 
