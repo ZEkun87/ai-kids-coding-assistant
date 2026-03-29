@@ -26,7 +26,7 @@ def build_graph():
     workflow.add_edge("retrieve", "generate")
     workflow.add_edge("generate", "validate")
 
-    # 条件控制（关键！面试会问）
+    # 条件控制
     def check_valid(state):
         return "explain" if state["validated"] else "generate"
 
