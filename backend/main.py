@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -13,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 load_dotenv(BASE_DIR.parent / ".env")
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="AI 少儿编程助手")
 
@@ -26,6 +28,12 @@ app.add_middleware(
 
 init_db()
 app.include_router(chat_router)
+
+logger.info(
+    "Startup config: DASHSCOPE_API_KEY=%s, VECTOR_DB_PATH=%s",
+    "configured" if os.getenv("DASHSCOPE_API_KEY") else "missing",
+    os.getenv("VECTOR_DB_PATH", "./vector_db"),
+)
 
 
 @app.get("/")
