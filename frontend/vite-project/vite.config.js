@@ -5,9 +5,28 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // 把 /ask 请求代理到后端 8000 端口
       '/ask': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
+      '/ask-stream': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
+      '/upload': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
+      '/history': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
+      '/analyze': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
+      '/exercise': {
+        target: 'http://127.0.0.1:8001',
         changeOrigin: true,
       },
     },

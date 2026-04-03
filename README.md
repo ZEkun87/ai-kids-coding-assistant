@@ -183,6 +183,40 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
+### 本地联调（前后端）
+
+```bash
+# Terminal 1: backend
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8001
+
+# Terminal 2: frontend
+cd frontend/vite-project
+npm install
+npm run dev
+```
+
+前端开发代理已配置到 `http://127.0.0.1:8001`，默认可直连 `/ask`、`/ask-stream`、`/upload`、`/history`、`/analyze`、`/exercise`。
+
+### 常见问题排查
+
+1. **`Address already in use`（端口占用）**
+   - 查看占用：`lsof -i :8000` 或 `lsof -i :8001`
+   - 若被 Docker 占用，切换后端端口到 `8001` 并同步前端代理。
+
+2. **`ModuleNotFoundError: No module named 'langgraph'`**
+   - 执行：`pip install -r requirements.txt`
+   - 或单独安装：`pip install "langgraph>=0.2.0"`
+
+3. **`No api key provided`**
+   - 在 `backend/.env` 或项目根目录 `.env` 中配置：
+     - `DASHSCOPE_API_KEY=你的key`
+   - 重启后端后查看启动日志：
+     - `Startup config: DASHSCOPE_API_KEY=configured`
+
 ---
 
 ## 🔧 优化方向（可扩展）

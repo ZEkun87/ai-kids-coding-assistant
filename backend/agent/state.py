@@ -8,3 +8,4 @@ class AgentState(TypedDict):
     answer: Optional[str]
     validated: Optional[bool]
     final_answer: Optional[str]
+    generation_count: Optional[int]
