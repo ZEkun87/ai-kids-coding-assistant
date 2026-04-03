@@ -1,11 +1,14 @@
 import io
 import logging
+import re
 import time
 import uuid
 
 from docx import Document
 from fastapi import HTTPException, UploadFile
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 from PyPDF2 import PdfReader
+import pytesseract
 
 from agent.runner import run_agent
 from llm.dashscope_client import call_dashscope
@@ -14,6 +17,32 @@ from rag.chroma_store import query_vector_db, save_documents_to_vector_db
 
 
 logger = logging.getLogger(__name__)
+
+
+def _preprocess_ocr_image(image: Image.Image) -> Image.Image:
+    # Improve OCR stability for code screenshots.
+    gray = ImageOps.grayscale(image)
+    denoised = gray.filter(ImageFilter.MedianFilter(size=3))
+    contrast = ImageEnhance.Contrast(denoised).enhance(1.8)
+    # Binary threshold boosts text-background separation.
+    return contrast.point(lambda p: 255 if p > 155 else 0)
+
+
+def _format_extracted_code_text(text: str) -> str:
+    lines = [line.rstrip() for line in text.splitlines()]
+    # Remove empty leading/trailing lines.
+    while lines and not lines[0].strip():
+        lines.pop(0)
+    while lines and not lines[-1].strip():
+        lines.pop()
+
+    cleaned = []
+    for line in lines:
+        fixed = line.replace("\t", "    ")
+        fixed = fixed.replace("，", ",").replace("：", ":").replace("（", "(").replace("）", ")")
+        fixed = re.sub(r"[ ]{2,}", " ", fixed) if fixed.lstrip().startswith("#") else fixed
+        cleaned.append(fixed)
+    return "\n".join(cleaned).strip()
 
 
 def ask_question(question: str, category: str = "default") -> dict:
@@ -91,3 +120,31 @@ def ask_stream_lines(question: str):
     except Exception as exc:
         logger.error("流式回答失败：%s request_id=%s", exc, request_id)
         yield "抱歉，回答生成失败，请稍后再试～\n"
+
+
+async def ocr_code_analyze(file: UploadFile) -> dict:
+    try:
+        content = await file.read()
+        image = Image.open(io.BytesIO(content))
+        preprocessed = _preprocess_ocr_image(image)
+        extracted_text = pytesseract.image_to_string(
+            preprocessed,
+            lang="eng",
+            config="--oem 3 --psm 6",
+        )
+        extracted_text = _format_extracted_code_text(extracted_text)
+        if not extracted_text:
+            raise HTTPException(status_code=400, detail="未识别到可用文本，请换一张更清晰的代码截图。")
+
+        analysis = analyze_code(extracted_text)
+        return {"extracted_text": extracted_text, "analysis": analysis}
+    except HTTPException:
+        raise
+    except pytesseract.TesseractNotFoundError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="OCR 依赖未安装：请先安装 tesseract（macOS: brew install tesseract）。",
+        ) from exc
+    except Exception as exc:
+        logger.error("OCR code analyze failed: %s", exc)
+        raise HTTPException(status_code=500, detail=f"OCR 识别失败：{exc}") from exc

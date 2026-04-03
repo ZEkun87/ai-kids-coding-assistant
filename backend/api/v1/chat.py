@@ -10,6 +10,7 @@ from service.qa_service import (
     ask_question,
     ask_stream_lines,
     generate_exercise,
+    ocr_code_analyze,
     upload_and_index,
 )
 
@@ -67,3 +68,8 @@ def ask_stream(request: QuestionRequest):
     return StreamingResponse(
         ask_stream_lines(request.question), media_type="text/event-stream"
     )
+
+
+@router.post("/ocr-code-analyze")
+async def ocr_code_analyze_endpoint(file: UploadFile = File(...)):
+    return await ocr_code_analyze(file=file)

@@ -9,3 +9,5 @@ chromadb>=0.4.24
 langgraph>=0.2.0
 requests>=2.31.0
 python-multipart>=0.0.6
+pytesseract>=0.3.10
+Pillow>=10.0.0
