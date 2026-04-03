@@ -26,7 +26,11 @@ export default function ChatApp() {
       });
       if (!res.ok) throw new Error(res.statusText);
       const data = await res.json();
-      const newAIMessage = { role: 'ai', content: data.answer || "暂无回答" };
+      const newAIMessage = { 
+        role: 'ai', 
+        content: data.answer || "暂无回答",
+        intent: data.intent || 'qa',
+      };
       setChatHistory(prev => [...prev, newAIMessage]);
     } catch (err) {
       const errorMessage = { role: 'ai', content: "请求失败：" + err.message };
@@ -60,24 +64,31 @@ export default function ChatApp() {
             <div className="message-avatar">{msg.role === 'user' ? '👧' : '🤖'}</div>
             <div className="message-content">
               {msg.role === 'ai' ? (
-                <ReactMarkdown
-                  components={{
-                    code({ node, inline, className, children, ...props }) {
-                      const match = /language-(\w+)/.exec(className || '');
-                      return !inline && match ? (
-                        <SyntaxHighlighter style={dracula} language={match[1]} PreTag="div" {...props}>
-                          {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code style={{ backgroundColor:'#3a3a3a', padding:'2px 6px', borderRadius:'4px', color:'#ff7979', fontFamily:'Consolas, Monaco, monospace' }} {...props}>
-                          {children}
-                        </code>
-                      );
-                    }
-                  }}
-                >
-                  {msg.content}
-                </ReactMarkdown>
+                <>
+                  {msg.intent && (
+                    <div className={`intent-tag intent-tag-${msg.intent}`}>
+                      {msg.intent === 'code_analysis' ? '代码诊断' : '知识问答'}
+                    </div>
+                  )}
+                  <ReactMarkdown
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '');
+                        return !inline && match ? (
+                          <SyntaxHighlighter style={dracula} language={match[1]} PreTag="div" {...props}>
+                            {String(children).replace(/\n$/, '')}
+                          </SyntaxHighlighter>
+                        ) : (
+                          <code style={{ backgroundColor:'#3a3a3a', padding:'2px 6px', borderRadius:'4px', color:'#ff7979', fontFamily:'Consolas, Monaco, monospace' }} {...props}>
+                            {children}
+                          </code>
+                        );
+                      }
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                </>
               ) : <p>{msg.content}</p>}
             </div>
           </div>

@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -8,7 +9,9 @@ from api.v1.chat import router as chat_router
 from models.chat import init_db
 
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR.parent / ".env")
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="AI 少儿编程助手")

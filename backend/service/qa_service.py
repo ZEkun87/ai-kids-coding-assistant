@@ -22,14 +22,15 @@ def ask_question(question: str, category: str = "default") -> dict:
     result = run_agent(question)
     answer = result.get("final_answer") or result.get("answer") or "暂无回答"
     docs = result.get("documents") or []
+    intent = result.get("intent", "qa")
     save_chat(question, answer, category)
     logger.info(
         "[ask] request_id=%s intent=%s docs=%s",
         request_id,
-        result.get("intent"),
+        intent,
         len(docs),
     )
-    return {"answer": answer, "sources": docs}
+    return {"answer": answer, "sources": docs, "intent": intent}
 
 
 def analyze_code(code: str) -> str:

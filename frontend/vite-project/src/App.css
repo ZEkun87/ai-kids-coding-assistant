@@ -163,6 +163,28 @@ h1 {
   color: #e0e0e0;
 }
 
+.intent-tag {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d6ecff;
+  background: linear-gradient(90deg, #2f80ed, #56ccf2);
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+}
+
+.intent-tag-qa {
+  color: #d6ecff;
+  background: linear-gradient(90deg, #2f80ed, #56ccf2);
+}
+
+.intent-tag-code_analysis {
+  color: #f2dcff;
+  background: linear-gradient(90deg, #8e44ad, #c471ed);
+}
+
 /* 输入区域样式 */
 .input-area {
   display: flex;
