@@ -9,7 +9,7 @@ def generate_node(state: dict):
 参考文档：
 {context}
 
-要求：1. 适合小学生/初中生理解；2. 语气友好；3. 引导思考而非直接给答案。
+要求：1. 适合小学生/初中生理解；2. 语气友好；3. 直接给出答案和解释。
 """
     answer = call_dashscope(prompt, temperature=0.7)
     generation_count = state.get("generation_count", 0) + 1

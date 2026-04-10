@@ -1,3 +1,12 @@
+"""
+少儿编程智能辅导系统 - QA Service Module
+==========================================
+Author: 少儿编程智能辅导系统开发团队
+License: Non-Commercial Use License
+Copyright (c) 2024 All Rights Reserved
+Watermark: KIDS_CODING_TUTOR_2024_AUTHORIZED
+"""
+
 import io
 import logging
 import re
@@ -39,16 +48,42 @@ def _format_extracted_code_text(text: str) -> str:
     cleaned = []
     for line in lines:
         fixed = line.replace("\t", "    ")
-        fixed = fixed.replace("，", ",").replace("：", ":").replace("（", "(").replace("）", ")")
-        fixed = re.sub(r"[ ]{2,}", " ", fixed) if fixed.lstrip().startswith("#") else fixed
+        fixed = (
+            fixed.replace("，", ",")
+            .replace("：", ":")
+            .replace("（", "(")
+            .replace("）", ")")
+        )
+        fixed = (
+            re.sub(r"[ ]{2,}", " ", fixed) if fixed.lstrip().startswith("#") else fixed
+        )
         cleaned.append(fixed)
     return "\n".join(cleaned).strip()
 
 
-def ask_question(question: str, category: str = "default") -> dict:
+def _build_contextual_question(question: str, history: list[dict]) -> str:
+    if not history:
+        return question
+
+    formatted_history = []
+    for item in history[-6:]:
+        role = "用户" if item.get("role") == "user" else "助手"
+        formatted_history.append(f"{role}: {item.get('content', '')}")
+
+    history_text = "\n".join(formatted_history)
+    return f"以下是之前的对话历史：\n{history_text}\n\n用户继续提问：{question}"
+
+
+def ask_question(
+    question: str, history: list[dict] | None = None, category: str = "default"
+) -> dict:
+    history = history or []
+    contextual_question = _build_contextual_question(question, history)
     request_id = str(uuid.uuid4())
-    logger.info("[ask] request_id=%s question=%s category=%s", request_id, question, category)
-    result = run_agent(question)
+    logger.info(
+        "[ask] request_id=%s question=%s category=%s", request_id, question, category
+    )
+    result = run_agent(contextual_question)
     answer = result.get("final_answer") or result.get("answer") or "暂无回答"
     docs = result.get("documents") or []
     intent = result.get("intent", "qa")
@@ -86,10 +121,14 @@ async def upload_and_index(file: UploadFile, category: str = "default") -> dict:
 
         if filename.endswith(".pdf"):
             reader = PdfReader(io.BytesIO(content))
-            texts = [page.extract_text() for page in reader.pages if page.extract_text()]
+            texts = [
+                page.extract_text() for page in reader.pages if page.extract_text()
+            ]
         elif filename.endswith(".docx"):
             doc = Document(io.BytesIO(content))
-            texts = [paragraph.text for paragraph in doc.paragraphs if paragraph.text.strip()]
+            texts = [
+                paragraph.text for paragraph in doc.paragraphs if paragraph.text.strip()
+            ]
         else:
             texts = content.decode(errors="ignore").split("\n")
 
@@ -134,7 +173,9 @@ async def ocr_code_analyze(file: UploadFile) -> dict:
         )
         extracted_text = _format_extracted_code_text(extracted_text)
         if not extracted_text:
-            raise HTTPException(status_code=400, detail="未识别到可用文本，请换一张更清晰的代码截图。")
+            raise HTTPException(
+                status_code=400, detail="未识别到可用文本，请换一张更清晰的代码截图。"
+            )
 
         analysis = analyze_code(extracted_text)
         return {"extracted_text": extracted_text, "analysis": analysis}
@@ -148,3 +189,39 @@ async def ocr_code_analyze(file: UploadFile) -> dict:
     except Exception as exc:
         logger.error("OCR code analyze failed: %s", exc)
         raise HTTPException(status_code=500, detail=f"OCR 识别失败：{exc}") from exc
+
+
+async def speech_to_text(file: UploadFile) -> dict:
+    """Convert speech audio to text using DashScope ASR API."""
+    try:
+        content = await file.read()
+        filename = (file.filename or "").lower()
+
+        # Validate file format - support webm from browser recording
+        if not any(
+            filename.endswith(ext)
+            for ext in [".wav", ".mp3", ".m4a", ".aac", ".flac", ".webm", ".ogg"]
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail="不支持的音频格式，请使用 wav/mp3/m4a/aac/flac/webm/ogg 格式。",
+            )
+
+        # Use DashScope ASR service for speech recognition
+        from llm.dashscope_client import transcribe_audio
+
+        text = transcribe_audio(content, filename)
+
+        if not text or not text.strip():
+            raise HTTPException(
+                status_code=400, detail="未能识别到语音内容，请检查音频文件是否清晰。"
+            )
+
+        logger.info("Speech recognized successfully, length: %d", len(text))
+        return {"text": text.strip()}
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("Speech to text failed: %s", exc)
+        raise HTTPException(status_code=500, detail=f"语音识别失败：{exc}") from exc

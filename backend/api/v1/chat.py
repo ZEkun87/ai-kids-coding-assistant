@@ -1,4 +1,5 @@
 import uuid
+from typing import List, Optional
 
 from fastapi import APIRouter, File, Query, UploadFile
 from fastapi.responses import StreamingResponse
@@ -11,6 +12,7 @@ from service.qa_service import (
     ask_stream_lines,
     generate_exercise,
     ocr_code_analyze,
+    speech_to_text,
     upload_and_index,
 )
 
@@ -18,8 +20,14 @@ from service.qa_service import (
 router = APIRouter()
 
 
+class HistoryItem(BaseModel):
+    role: str
+    content: str
+
+
 class QuestionRequest(BaseModel):
     question: str
+    history: List[HistoryItem] = []
     category: str = "default"
 
 
@@ -34,7 +42,8 @@ class TopicRequest(BaseModel):
 @router.post("/ask")
 def ask_question_endpoint(request: QuestionRequest):
     request_id = str(uuid.uuid4())
-    result = ask_question(request.question, request.category)
+    history = [item.dict() for item in request.history]
+    result = ask_question(request.question, history, request.category)
     return {
         "answer": result["answer"],
         "request_id": request_id,
@@ -59,17 +68,27 @@ async def upload_file(file: UploadFile = File(...), category: str = Query("defau
 
 
 @router.get("/history")
-def get_history_endpoint(category: str | None = None, limit: int = 20):
+def get_history_endpoint(category: Optional[str] = None, limit: int = 20):
     return get_history(category=category, limit=limit)
 
 
 @router.post("/ask-stream")
 def ask_stream(request: QuestionRequest):
-    return StreamingResponse(
-        ask_stream_lines(request.question), media_type="text/event-stream"
-    )
+    async def generate_sse_events():
+        """Wrap streaming response in SSE format."""
+        for line in ask_stream_lines(request.question):
+            # SSE format: data: {line}\n\n
+            yield f"data: {line}\n\n"
+
+    return StreamingResponse(generate_sse_events(), media_type="text/event-stream")
 
 
 @router.post("/ocr-code-analyze")
 async def ocr_code_analyze_endpoint(file: UploadFile = File(...)):
     return await ocr_code_analyze(file=file)
+
+
+@router.post("/speech-to-text")
+async def speech_to_text_endpoint(file: UploadFile = File(...)):
+    """Convert speech audio to text."""
+    return await speech_to_text(file=file)

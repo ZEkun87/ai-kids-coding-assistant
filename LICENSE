@@ -1,0 +1,140 @@
+# 非商业性使用许可证
+# Non-Commercial Use License
+
+版权所有 (c) 2024 少儿编程智能辅导系统项目作者
+
+## 重要声明
+
+本项目仅供**学习、研究和个人非商业用途**使用。未经作者明确书面授权，**严禁**将本项目或其任何部分用于以下用途：
+
+### ❌ 禁止的行为
+1. **商业盈利**: 不得将本项目用于任何形式的商业活动、产品销售或付费服务
+2. **二次销售**: 不得将本项目打包、修改后作为产品出售
+3. **SaaS服务**: 不得基于本项目提供在线付费服务或API服务
+4. **培训收费**: 不得将本项目用于收费培训课程或教学材料
+5. **去除署名**: 不得移除、修改或隐藏项目中的作者信息、版权声明和水印标识
+6. **虚假宣称**: 不得声称自己是项目的原作者或拥有项目所有权
+
+### ✅ 允许的行为
+1. **个人学习**: 可以用于个人学习、研究和技能提升
+2. **学术交流**: 可以在学术论文、技术博客中引用（需注明出处）
+3. **开源贡献**: 可以提交改进建议、Bug修复和功能增强（通过Pull Request）
+4. **非营利教育**: 可以在非营利性教育机构中免费使用
+5. ** forks**: 可以Fork项目进行学习和实验（需保留本许可证和署名）
+
+## 水印保护机制
+
+本项目在代码中嵌入了数字水印和作者标识，包括但不限于：
+- 启动日志中的作者信息
+- API响应头中的版权标识
+- 关键模块中的注释署名
+- 数据库记录中的元数据标记
+
+**移除或篡改这些水印标识将构成严重的侵权行为。**
+
+## 授权申请
+
+如需将本项目用于商业用途，请联系作者获取商业授权：
+- 📧 Email: zekunio@outlook.com
+- 💬 WeChat: [your-wechat-id]
+- 🌐 Website: [your-website.com]
+
+商业授权将根据使用场景、规模和期限进行单独协商。
+
+## 侵权追责
+
+对于违反本许可证的行为，作者保留以下权利：
+1. 要求立即停止侵权行为
+2. 要求公开道歉并消除影响
+3. 追究法律责任并要求经济赔偿
+4. 向GitHub平台举报并请求下架侵权仓库
+5. 采取其他法律手段维护合法权益
+
+## 免责声明
+
+1. 本项目按"原样"提供，不提供任何形式的明示或暗示担保
+2. 作者不对使用本项目产生的任何直接或间接损失负责
+3. 使用者应自行承担使用本项目的风险和责任
+4. 作者保留随时更新本许可证的权利
+
+## 适用法律
+
+本许可证受中华人民共和国法律保护。任何因本许可证引起的争议，应首先通过友好协商解决；协商不成的，应向作者所在地人民法院提起诉讼。
+
+---
+
+**最后更新**: 2024年4月  
+**版本**: 1.0  
+**作者**: 少儿编程智能辅导系统开发团队
+
+---
+
+# English Version
+
+## Non-Commercial Use License
+
+Copyright (c) 2024 AI Kids Coding Assistant Project Authors
+
+### Important Notice
+
+This project is provided for **learning, research, and personal non-commercial use only**. Without explicit written authorization from the authors, it is **strictly prohibited** to use this project or any part of it for the following purposes:
+
+### ❌ Prohibited Activities
+1. **Commercial Profit**: Cannot be used for any commercial activities, product sales, or paid services
+2. **Resale**: Cannot be packaged or modified and sold as a product
+3. **SaaS Services**: Cannot be used to provide online paid services or API services
+4. **Paid Training**: Cannot be used for paid training courses or educational materials
+5. **Attribution Removal**: Cannot remove, modify, or hide author information, copyright notices, and watermark identifiers
+6. **False Claims**: Cannot claim to be the original author or owner of the project
+
+### ✅ Permitted Activities
+1. **Personal Learning**: Can be used for personal learning, research, and skill development
+2. **Academic Exchange**: Can be cited in academic papers and technical blogs (with proper attribution)
+3. **Open Source Contribution**: Can submit improvements, bug fixes, and feature enhancements (via Pull Request)
+4. **Non-profit Education**: Can be used free of charge in non-profit educational institutions
+5. **Forks**: Can fork the project for learning and experimentation (must retain this license and attribution)
+
+### Watermark Protection Mechanism
+
+This project embeds digital watermarks and author identifiers in the code, including but not limited to:
+- Author information in startup logs
+- Copyright identifiers in API response headers
+- Comment attributions in key modules
+- Metadata markers in database records
+
+**Removing or tampering with these watermark identifiers constitutes serious infringement.**
+
+### License Application
+
+For commercial use, please contact the authors to obtain a commercial license:
+- 📧 Email: zekunio@outlook.com
+- 💬 WeChat: [your-wechat-id]
+- 🌐 Website: [your-website.com]
+
+Commercial licensing will be negotiated separately based on usage scenario, scale, and duration.
+
+### Enforcement
+
+For violations of this license, the authors reserve the right to:
+1. Demand immediate cessation of infringing activities
+2. Require public apology and damage control
+3. Pursue legal action and seek financial compensation
+4. Report to GitHub platform and request removal of infringing repositories
+5. Take other legal measures to protect legitimate rights and interests
+
+### Disclaimer
+
+1. This project is provided "as is" without any express or implied warranties
+2. The authors are not liable for any direct or indirect damages arising from the use of this project
+3. Users assume all risks and responsibilities for using this project
+4. The authors reserve the right to update this license at any time
+
+### Governing Law
+
+This license is governed by the laws of the People's Republic of China. Any disputes arising from this license shall first be resolved through friendly negotiations; if negotiations fail, litigation shall be filed in the people's court at the author's location.
+
+---
+
+**Last Updated**: April 2024  
+**Version**: 1.0  
+**Authors**: AI Kids Coding Assistant Development Team

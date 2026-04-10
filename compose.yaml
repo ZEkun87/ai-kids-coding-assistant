@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 数据库服务
+  postgres:
+    image: pgvector/pgvector:pg16-latest
+    container_name: ai-coding-tutor-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-ai_coding_tutor}
+      PGUSER: ${DB_USER:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - coding-tutor-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=vector"
+
+  # Backend 应用服务
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ai-coding-tutor-backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      # Database
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-ai_coding_tutor}
+      # LLM
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      # Python
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      # App
+      - ENV=production
+    volumes:
+      - ./data:/app/data
+    networks:
+      - coding-tutor-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend 应用服务
+  frontend:
+    build:
+      context: ./frontend/vite-project
+      dockerfile: Dockerfile
+    container_name: ai-coding-tutor-frontend
+    restart: always
+    environment:
+      - VITE_API_URL=http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - coding-tutor-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  coding-tutor-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

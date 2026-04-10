@@ -1,20 +1,64 @@
-# .gitignore 内容
-
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+dist/
+build/
+
+# Environment & Secrets (完全忽略所有环境变量文件)
 .env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+.env.test.local
+# ⚠️ 不要将任何包含密钥的文件提交!
 
 # Virtualenv
 venv/
 env/
 .venv/
+ENV/
+venv.bak/
+env.bak/
 
-# Chroma / DB
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Project specific
 vector_db/
 chat_history.db
+chroma_db/
+logs/
+*.log
 
-# macOS
-.DS_Store
+# Build artifacts
+dist/
+build/
+*.egg-info/
+frontend/vite-project/dist/
+frontend/vite-project/.vite/
+
+# Node/npm
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Backend dependencies cache
+backend/vendor/
+backend/packages/
+backend/dist/

@@ -5,6 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
       '/ask': {
         target: 'http://127.0.0.1:8001',
         changeOrigin: true,
@@ -14,7 +18,7 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/upload': {
-        target: 'http://127.0.0.1:8001',
+        target: 'http://127.0.0.0:8001',
         changeOrigin: true,
       },
       '/history': {
@@ -26,6 +30,10 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/exercise': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true,
+      },
+      '/ocr-code-analyze': {
         target: 'http://127.0.0.1:8001',
         changeOrigin: true,
       },

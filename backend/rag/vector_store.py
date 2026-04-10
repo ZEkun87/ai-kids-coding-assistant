@@ -2,6 +2,7 @@
 import os
 import logging
 import threading
+from pathlib import Path
 
 import chromadb
 from chromadb.config import Settings
@@ -9,20 +10,22 @@ from langchain_community.embeddings import DashScopeEmbeddings
 
 # ================= 配置 =================
 
-PERSIST_DIR = "/app/vector_db"  # Docker 中最好用绝对路径
-#PERSIST_DIR = "./vector_db"
+# Use environment variable if set, otherwise use relative path for local dev
+# Docker containers should set PERSIST_DIR env var
+if os.getenv("PERSIST_DIR"):
+    PERSIST_DIR = os.getenv("PERSIST_DIR")
+else:
+    # Local development: store in backend/vector_db
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    PERSIST_DIR = str(BASE_DIR / "vector_db")
+
 COLLECTION_NAME = "knowledge_base"
 EMBEDDING_MODEL = "text-embedding-v1"
 
 API_KEY = os.getenv("DASHSCOPE_API_KEY")
 
-# ================= 日志 =================
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s"
-)
-logger = logging.getLogger(__name__)
+# ================= Logging Setup (Don't override app-level config) =================
+# Get logger without basicConfig - let FastAPI/app handle loggingogger = logging.getLogger(__name__)
 
 # ================= 单例缓存 =================
 
@@ -31,15 +34,15 @@ _lock = threading.Lock()
 
 # ================= Embedding =================
 
+
 def get_embeddings():
     if not API_KEY:
         raise ValueError("DASHSCOPE_API_KEY 未设置")
-    return DashScopeEmbeddings(
-        model=EMBEDDING_MODEL,
-        dashscope_api_key=API_KEY
-    )
+    return DashScopeEmbeddings(model=EMBEDDING_MODEL, dashscope_api_key=API_KEY)
+
 
 # ================= Vector Store =================
+
 
 def get_vector_store():
     global _vector_db_client
@@ -61,8 +64,8 @@ def get_vector_store():
                 path=PERSIST_DIR,
                 settings=Settings(
                     allow_reset=False,  # False 表示不会重置已有数据
-                    anonymized_telemetry=False
-                )
+                    anonymized_telemetry=False,
+                ),
             )
 
             # 创建或获取 collection
@@ -79,12 +82,15 @@ def get_vector_store():
             logger.error(f"Vector DB initialization failed: {e}")
             raise
 
+
 # ================= Retriever =================
+
 
 def get_retriever(k=3):
     vectordb_client = get_vector_store()
     collection = vectordb_client.get_collection(COLLECTION_NAME)
     return collection.as_retriever(search_kwargs={"k": k})
+
 
 """
 if __name__ == "__main__":
