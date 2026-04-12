@@ -42,7 +42,8 @@ class TopicRequest(BaseModel):
 @router.post("/ask")
 def ask_question_endpoint(request: QuestionRequest):
     request_id = str(uuid.uuid4())
-    history = [item.dict() for item in request.history]
+    # Pydantic v2 compatibility: use model_dump() instead of dict()
+    history = [item.model_dump() for item in request.history]
     result = ask_question(request.question, history, request.category)
     return {
         "answer": result["answer"],

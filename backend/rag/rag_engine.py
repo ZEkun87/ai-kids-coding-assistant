@@ -4,13 +4,49 @@ import uuid
 from functools import lru_cache
 from typing import List, Optional, Dict, Any
 
-from langchain.chains import RetrievalQA
-from langchain_community.chat_models import ChatTongyi
+# LangChain imports - updated for newer versions
+try:
+    # Try old import path first
+    from langchain.chains import RetrievalQA
+except (ImportError, ModuleNotFoundError):
+    try:
+        # Try alternative path for LangChain 0.x
+        from langchain.chains.retrieval_qa.base import RetrievalQA
+    except (ImportError, ModuleNotFoundError):
+        # For LangChain 1.x, create a simple wrapper
+        from langchain_core.runnables import RunnablePassthrough
+        from langchain_core.output_parsers import StrOutputParser
+
+        class RetrievalQA:
+            """Simple RetrievalQA wrapper for LangChain 1.x"""
+
+            @classmethod
+            def from_chain_type(cls, llm, chain_type="stuff", retriever=None, **kwargs):
+                def format_docs(docs):
+                    return "\n\n".join(doc.page_content for doc in docs)
+
+                rag_chain = (
+                    {
+                        "context": retriever | format_docs,
+                        "question": RunnablePassthrough(),
+                    }
+                    | llm
+                    | StrOutputParser()
+                )
+                return rag_chain
+
+
+try:
+    from langchain_community.chat_models import ChatTongyi
+except ImportError:
+    # For newer versions
+    from langchain_community.llms import Tongyi as ChatTongyi
 
 from .vector_store import get_vector_store
 
 logger = logging.getLogger(__name__)
 MAX_QUERY_LENGTH = 1000
+
 
 # ------------------ 工具函数 ------------------
 def validate_query(query: str) -> str:
@@ -23,6 +59,7 @@ def validate_query(query: str) -> str:
         raise ValueError(f"Query too long, max {MAX_QUERY_LENGTH} characters")
     return query.strip()
 
+
 @lru_cache(maxsize=1)
 def get_db():
     """
@@ -31,6 +68,7 @@ def get_db():
     logger.info("Loading vector database...")
     return get_vector_store()
 
+
 @lru_cache(maxsize=2)
 def get_llm(model_name: str, temperature: float):
     """
@@ -38,13 +76,14 @@ def get_llm(model_name: str, temperature: float):
     """
     return ChatTongyi(model=model_name, temperature=temperature)
 
+
 # ------------------ 核心 RAG 查询 ------------------
 def ask_knowledge(
     question: str,
     model_name: str = "qwen-turbo",
     temperature: float = 0.1,
     search_k: int = 3,
-    category: Optional[str] = None
+    category: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     RAG 查询核心函数
@@ -83,33 +122,25 @@ def ask_knowledge(
             llm=llm,
             chain_type="stuff",
             retriever=retriever,
-            return_source_documents=True
+            return_source_documents=True,
         )
 
-        logger.info(f"[{request_id}] question: {question}, category: {category}, model: {model_name}")
+        logger.info(
+            f"[{request_id}] question: {question}, category: {category}, model: {model_name}"
+        )
 
         response = qa_chain({"query": question})
         answer = response.get("result", "")
-        sources = [
-            doc.page_content
-            for doc in response.get("source_documents", [])
-        ]
+        sources = [doc.page_content for doc in response.get("source_documents", [])]
 
         logger.info(f"[{request_id}] RAG success, answer length: {len(answer)}")
 
         return {
             "code": 0,
             "message": "success",
-            "data": {
-                "answer": answer,
-                "sources": sources
-            }
+            "data": {"answer": answer, "sources": sources},
         }
 
     except Exception as e:
         logger.exception(f"[{request_id}] RAG error")
-        return {
-            "code": 500,
-            "message": str(e),
-            "data": None
-        }
+        return {"code": 500, "message": str(e), "data": None}

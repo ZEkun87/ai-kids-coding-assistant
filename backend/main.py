@@ -102,7 +102,8 @@ app.include_router(rag_router, prefix="/api/v1/rag")
 async def add_copyright_header(request: Request, call_next):
     """Add copyright and watermark headers to all responses."""
     response = await call_next(request)
-    response.headers["X-Project-Name"] = PROJECT_METADATA["name"]
+    # HTTP headers must be ASCII/Latin-1 encoded, use English only
+    response.headers["X-Project-Name"] = PROJECT_METADATA["name_en"]
     response.headers["X-Copyright"] = PROJECT_METADATA["copyright"]
     response.headers["X-Watermark-ID"] = PROJECT_METADATA["watermark_id"]
     response.headers["X-License"] = PROJECT_METADATA["license"]

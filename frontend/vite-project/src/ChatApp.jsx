@@ -23,7 +23,7 @@ export default function ChatApp() {
     setQuestion('');
 
     try {
-      const res = await fetch("http://127.0.0.1:8001/api/v1/chat/ask", {
+      const res = await fetch("http://127.0.0.1:8000/api/v1/chat/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -70,7 +70,7 @@ export default function ChatApp() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await fetch("http://127.0.0.1:8001/api/v1/chat/ocr-code-analyze", {
+      const res = await fetch("http://127.0.0.1:8000/api/v1/chat/ocr-code-analyze", {
         method: "POST",
         body: formData,
       });
@@ -170,7 +170,7 @@ export default function ChatApp() {
       const formData = new FormData();
       formData.append("file", audioBlob, `recording.${extension}`);
 
-      const res = await fetch("http://127.0.0.1:8001/api/v1/chat/speech-to-text", {
+      const res = await fetch("http://127.0.0.1:8000/api/v1/chat/speech-to-text", {
         method: "POST",
         body: formData,
       });
